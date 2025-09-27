@@ -6,8 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { DialogComp } from "@/components/custom/dilogComp";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress"; // Tailwind/shadcn progress component
+import { Progress } from "@/components/ui/progress";
 import { FileUploadArea } from "@/components/custom/fileUploadArea";
 
 // API calls
@@ -34,6 +33,7 @@ async function uploadFileToPresignedUrl(file: File, presignedUrl: string, onProg
 }
 
 export default function MediaPage() {
+	const MEDIA_BASE_PATH = "https://media.r2s.space";
 	const { userid, orgid } = useParams();
 	const [mediaList, setMediaList] = useState<Media[]>([]);
 	const [mediaPayload, setMediaPayload] = useState<Media>({
@@ -127,27 +127,32 @@ export default function MediaPage() {
 			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
 				{mediaList.map((item) => (
 					<div key={item.id} className="bg-card border rounded-lg shadow overflow-hidden">
+						<div className="h-48 bg-muted flex items-center justify-center">
+							{(item.media_type === "jpg" || item.media_type === "jpeg" || item.media_type === "png" || item.media_type === "gif") && (
+								<img src={`${MEDIA_BASE_PATH}${item.url}`} alt={item.name} className="w-full h-full object-cover" />
+							)}
+							{(item.media_type === "mp4" || item.media_type === "webm" || item.media_type === "ogg") && (
+								<video controls className="w-full h-full">
+									<source src={`${MEDIA_BASE_PATH}${item.url}`} type={`video/${item.media_type}`} />
+									Your browser does not support the video tag.
+								</video>
+							)}
+						</div>
 						<div className="p-4">
-							<h3 className="text-lg font-bold">{item.name}</h3>
+							<h3 className="text-lg font-bold truncate">{item.name}</h3>
 							<Badge variant="outline">{item.media_type}</Badge>
-							<div className="mt-4 text-sm space-y-1">
+							<div className="mt-2 text-sm space-y-1">
 								<div>
-									<strong>URL:</strong> <span className="font-mono">{item.url}</span>
+									<strong>URL:</strong>{" "}
+									<a
+										href={`${MEDIA_BASE_PATH}${item.url}`}
+										target="_blank"
+										rel="noopener noreferrer"
+										className="font-mono break-all hover:underline"
+									>{`${MEDIA_BASE_PATH}${item.url}`}</a>
 								</div>
 								<div>
 									<strong>Created:</strong> {new Date(item.created_at).toLocaleString()}
-								</div>
-								<div>
-									<strong>Updated:</strong> {new Date(item.updated_at).toLocaleString()}
-								</div>
-								<div>
-									<strong>Deleted:</strong> {String(item.is_deleted)}
-								</div>
-								<div>
-									<strong>User ID:</strong> <span className="font-mono">{item.user_id}</span>
-								</div>
-								<div>
-									<strong>Org ID:</strong> <span className="font-mono">{item.org_id}</span>
 								</div>
 							</div>
 						</div>
