@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress"; // Tailwind/shadcn progress component
+import { FileUploadArea } from "@/components/custom/fileUploadArea";
 
 // API calls
 async function getMediaList(userid = "", orgid = "") {
@@ -95,25 +96,24 @@ export default function MediaPage() {
 				</div>
 
 				<DialogComp title="Create Media" onSubmit={handleSubmit}>
-					<div className="space-y-2">
+					<div className="space-y-4">
 						<div>
 							<Label>Name</Label>
 							<Input placeholder="Media Name" value={mediaPayload.name} onChange={(e) => setMediaPayload({ ...mediaPayload, name: e.target.value })} />
 						</div>
-						<div>
-							<Label>File</Label>
-							<Input
-								type="file"
-								onChange={(e) => {
-									if (e.target.files && e.target.files[0]) setSelectedFile(e.target.files[0]);
-									setMediaPayload({
-										...mediaPayload,
-										name: mediaPayload.name || (e.target.files && e.target.files[0] ? e.target.files[0].name.split(".").slice(0, -1).join(".") : ""),
-										media_type: e.target && e.target.files && e.target.files[0] ? e.target.files[0].name.split(".").pop() : "",
-									});
-								}}
-							/>
-						</div>
+
+						<FileUploadArea
+							selectedFile={selectedFile}
+							onFileSelect={(file) => {
+								setSelectedFile(file);
+								setMediaPayload({
+									...mediaPayload,
+									name: mediaPayload.name || file.name.split(".").slice(0, -1).join("."),
+									media_type: file.name.split(".").pop(),
+								});
+							}}
+						/>
+
 						{uploading && (
 							<div className="mt-2">
 								<Progress value={uploadProgress} className="h-2 rounded-full" />
