@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import axios from "axios";
 import type { Media } from "@/types/media";
+import { Badge } from "@/components/ui/badge";
 
 async function getMediaList(userid = "", orgid = "") {
 	const url = `http://localhost:8000/media/list?orgid=${orgid}&userid=${userid}`;
 
 	let res = await axios.get(url);
-	return res.data;
+	return res.data.data;
 }
 
 export default function MediaPage() {
@@ -36,7 +37,7 @@ export default function MediaPage() {
 					<div key={item.id} className="bg-card border rounded-lg shadow-lg overflow-hidden">
 						<div className="p-4">
 							<h3 className="text-lg font-bold">{item.name}</h3>
-							<p className="text-sm text-muted-foreground">{item.media_type}</p>
+							<Badge variant={"outlineß"}>{item.media_type}</Badge>
 							<div className="mt-4 space-y-2 text-sm">
 								<div>
 									<strong>URL:</strong> <span className="font-mono">{item.url}</span>
