@@ -24,9 +24,8 @@ export default function OrgList() {
 			{orgList.map((org) => {
 				return (
 					<Link to={`/org/${org.id}/${userId}`}>
-						<div className="flex items-center underline font-bold">
-							<h2>{org.name}</h2>
-							<h4> shortid - {org.id}</h4>
+						<div className="font-bold underline">
+							{org.name} --- {org.id}
 						</div>
 					</Link>
 				);
