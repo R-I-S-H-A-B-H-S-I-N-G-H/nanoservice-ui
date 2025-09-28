@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { FileUploadArea } from "@/components/custom/fileUploadArea";
+import mime from "mime";
 
 // API calls
 async function getMediaList(userid = "", orgid = "") {
@@ -30,6 +31,11 @@ async function uploadFileToPresignedUrl(file: File, presignedUrl: string, onProg
 			onProgress(percent);
 		},
 	});
+}
+
+function isImage(fileNameWithExt?: string) {
+	if (!fileNameWithExt) return false;
+	return mime.getType(fileNameWithExt)?.startsWith("image/") || false;
 }
 
 export default function MediaPage() {
@@ -128,9 +134,7 @@ export default function MediaPage() {
 				{mediaList.map((item) => (
 					<div key={item.id} className="bg-card border rounded-lg shadow overflow-hidden">
 						<div className="h-48 bg-muted flex items-center justify-center">
-							{(item.media_type === "jpg" || item.media_type === "jpeg" || item.media_type === "png" || item.media_type === "gif") && (
-								<img src={`${MEDIA_BASE_PATH}${item.url}`} alt={item.name} className="w-full h-full object-cover" />
-							)}
+							{isImage(item.media_type) && <img src={`${MEDIA_BASE_PATH}${item.url}`} alt={item.name} className="w-full h-full object-cover" />}
 							{(item.media_type === "mp4" || item.media_type === "webm" || item.media_type === "ogg") && (
 								<video controls className="w-full h-full">
 									<source src={`${MEDIA_BASE_PATH}${item.url}`} type={`video/${item.media_type}`} />

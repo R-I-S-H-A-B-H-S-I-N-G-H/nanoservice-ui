@@ -6,15 +6,20 @@ import { StrictMode } from "react";
 import Media from "./pages/media";
 import OrgList from "./pages/org/list/index.tsx";
 import UserDash from './pages/userDash/index.tsx';
+import Members from "./pages/members/index.tsx";
 
 const router = createBrowserRouter([
 	{
-		path: "/org/list",
+		path: "/org",
 		element: <OrgList />,
 	},
 	{
 		path: "/org/:orgid",
 		children: [
+			{
+				path: "",
+				element: <Members />,
+			},
 			{
 				path: ":userid",
 				children: [
