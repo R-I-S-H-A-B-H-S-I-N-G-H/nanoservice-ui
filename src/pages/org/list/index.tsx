@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import type { Org } from "@/types/org";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 
 const userId = "p1RODZxD";
 async function getOrgList(userid = "", orgid = "") {

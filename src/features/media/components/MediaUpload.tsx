@@ -26,7 +26,16 @@ export function MediaUpload({ open, onClose, onUpload }: MediaUploadProps) {
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-            <Input id="files" type="file" multiple onChange={(e) => onUpload(e.target.files)} />
+            <Input
+              id="files"
+              type="file"
+              multiple
+              onChange={(e) => {
+                if (e.target.files) {
+                  onUpload(e.target.files);
+                }
+              }}
+            />
         </div>
         <DialogFooter>
           <Button onClick={onClose} variant="outline">Cancel</Button>

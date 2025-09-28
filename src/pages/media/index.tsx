@@ -27,7 +27,9 @@ async function uploadFileToPresignedUrl(file: File, presignedUrl: string, onProg
 	await axios.put(presignedUrl, file, {
 		headers: { "Content-Type": file.type },
 		onUploadProgress: (progressEvent) => {
-			const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+			const percent = progressEvent.total
+				? Math.round((progressEvent.loaded * 100) / progressEvent.total)
+				: 0;
 			onProgress(percent);
 		},
 	});
@@ -134,7 +136,7 @@ export default function MediaPage() {
 					<div key={item.id} className="bg-card border border-border rounded-lg shadow overflow-hidden">
 						<div className="h-48 bg-muted flex items-center justify-center">
 							{isImage(item.media_type) && <img src={`${MEDIA_BASE_PATH}${item.url}`} alt={item.name} className="w-full h-full object-cover" />}
-							{["mp4", "webm", "ogg"].includes(item.media_type) && (
+							{["mp4", "webm", "ogg"].includes(item.media_type ?? "") && (
 								<video controls className="w-full h-full">
 									<source src={`${MEDIA_BASE_PATH}${item.url}`} type={`video/${item.media_type}`} />
 									Your browser does not support the video tag.
@@ -154,7 +156,7 @@ export default function MediaPage() {
 									</a>
 								</div>
 								<div>
-									<strong>Created:</strong> {new Date(item.created_at).toLocaleString()}
+									<strong>Created:</strong> {item.created_at ? new Date(item.created_at).toLocaleString() : "N/A"}
 								</div>
 							</div>
 						</div>

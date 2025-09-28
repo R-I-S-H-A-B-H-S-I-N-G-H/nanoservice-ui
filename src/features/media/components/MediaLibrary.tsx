@@ -6,65 +6,6 @@ import { MediaViewer } from "./MediaViewer";
 import { MediaUpload } from "./MediaUpload";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
-// Mock API functions
-const initialMedia = [
-  {
-    id: "F_FJYWHm",
-    created_at: "2025-09-23T18:55:46.060000",
-    updated_at: "2025-09-23T18:59:39.257000",
-    is_deleted: false,
-    name: "pic1",
-    user_id: "user1",
-    org_id: "org1",
-    media_type: "IMAGE",
-    url: "www",
-  },
-  {
-    id: "cMJavbeM",
-    created_at: "2025-09-23T19:09:47.444000",
-    updated_at: "2025-09-23T19:09:47.444000",
-    is_deleted: false,
-    name: "pic2",
-    user_id: "user1",
-    org_id: "org1",
-    media_type: "IMAGE",
-    url: "/org1/user1/IMAGE/cMJavbeM",
-  },
-  {
-    id: "nKMDsk-P",
-    created_at: "2025-09-23T19:10:55.025000",
-    updated_at: "2025-09-23T19:10:55.025000",
-    is_deleted: false,
-    name: "vid1",
-    user_id: "user1",
-    org_id: "org1",
-    media_type: "mp4",
-    url: "/org1/user1/nKMDsk-P.mp4",
-  },
-  {
-    id: "5WLkark2",
-    created_at: "2025-09-23T19:14:40.980000",
-    updated_at: "2025-09-23T19:14:40.980000",
-    is_deleted: false,
-    name: "vid2",
-    user_id: "user1",
-    org_id: "org1",
-    media_type: "mp4",
-    url: "/org1/user1/5WLkark2.mp4",
-  },
-  {
-    id: "YlvkQ3qe",
-    created_at: "2025-09-23T19:14:50.487000",
-    updated_at: "2025-09-23T19:14:50.487000",
-    is_deleted: false,
-    name: "vid3",
-    user_id: "user1",
-    org_id: "org1",
-    media_type: "mp4",
-    url: "/org1/user1/YlvkQ3qe.mp4",
-  },
-];
-
 const API_BASE_URL = 'https://6ljvfygiw7lc4qbgpipxczo3fi0zqeug.lambda-url.us-east-1.on.aws';
 
 const fetchMedia = async (page: number): Promise<Media[]> => {
