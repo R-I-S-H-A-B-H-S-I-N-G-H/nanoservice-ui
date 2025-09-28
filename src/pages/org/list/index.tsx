@@ -1,9 +1,11 @@
 import DialogComp from "@/components/custom/dilogComp";
+import { TableComp } from "@/components/custom/tableComp";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import type { Org } from "@/types/org";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 const userId = "p1RODZxD";
 async function getOrgList(userid = "", orgid = "") {
@@ -21,6 +23,7 @@ async function createOrg(payload: Org) {
 
 export default function OrgList() {
 	const [orgList, setOrgList] = useState<Org[]>([]);
+	const navigate = useNavigate();
 	const [orgPayload, setOrgPayload] = useState<Org>({
 		name: "",
 		owner_id: userId,
@@ -48,20 +51,38 @@ export default function OrgList() {
 	}
 
 	return (
-		<>
-			<DialogComp title="Create Org" onSubmit={handleOrgCreate}>
-				<Input placeholder="Org Name" value={orgPayload.name} onChange={(e) => setOrgPayload({ ...orgPayload, name: e.target.value })} />
-				<Input placeholder="Owner Id" value={orgPayload.owner_id} onChange={(e) => setOrgPayload({ ...orgPayload, owner_id: e.target.value })} />
-			</DialogComp>
-			{orgList.map((org) => {
-				return (
-					<Link to={`/org/${org.id}`}>
-						<div className="font-bold underline">
-							{org.name} --- {org.id}
-						</div>
-					</Link>
-				);
-			})}
-		</>
+		<div className="space-y-6 p-6">
+			<Card>
+				<CardHeader>
+					<div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+						<CardTitle>Organizarions</CardTitle>
+						<DialogComp title="Create Org" onSubmit={handleOrgCreate}>
+							<Input placeholder="Org Name" value={orgPayload.name} onChange={(e) => setOrgPayload({ ...orgPayload, name: e.target.value })} />
+							<Input placeholder="Owner Id" value={orgPayload.owner_id} onChange={(e) => setOrgPayload({ ...orgPayload, owner_id: e.target.value })} />
+						</DialogComp>
+					</div>
+				</CardHeader>
+				<CardContent>
+					<TableComp
+						columns={[
+							{ header: "Name", accessor: "name" },
+							{ header: "Owner", accessor: "owner_id" },
+							{ header: "Created At", accessor: "created_at" },
+							{ header: "Updated At", accessor: "updated_at" },
+							{ header: "ID", accessor: "id" },
+						]}
+						data={orgList}
+						onRowClick={(user) => {
+							navigate(`${user.id}`, { relative: "path" });
+						}}
+						totalPages={20}
+						currentPage={2}
+						onPageChange={(page) => {
+							console.log(page);
+						}}
+					/>
+				</CardContent>
+			</Card>
+		</div>
 	);
 }
