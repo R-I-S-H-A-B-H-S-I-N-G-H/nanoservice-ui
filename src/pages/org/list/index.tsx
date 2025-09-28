@@ -55,7 +55,7 @@ export default function OrgList() {
 			<Card>
 				<CardHeader>
 					<div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
-						<CardTitle>Organizarions</CardTitle>
+						<CardTitle>Organizations</CardTitle>
 						<DialogComp title="Create Org" onSubmit={handleOrgCreate}>
 							<Input placeholder="Org Name" value={orgPayload.name} onChange={(e) => setOrgPayload({ ...orgPayload, name: e.target.value })} />
 							<Input disabled placeholder="Owner Id" value={orgPayload.owner_id} onChange={(e) => setOrgPayload({ ...orgPayload, owner_id: e.target.value })} />
