@@ -58,7 +58,7 @@ export default function OrgList() {
 						<CardTitle>Organizarions</CardTitle>
 						<DialogComp title="Create Org" onSubmit={handleOrgCreate}>
 							<Input placeholder="Org Name" value={orgPayload.name} onChange={(e) => setOrgPayload({ ...orgPayload, name: e.target.value })} />
-							<Input placeholder="Owner Id" value={orgPayload.owner_id} onChange={(e) => setOrgPayload({ ...orgPayload, owner_id: e.target.value })} />
+							<Input disabled placeholder="Owner Id" value={orgPayload.owner_id} onChange={(e) => setOrgPayload({ ...orgPayload, owner_id: e.target.value })} />
 						</DialogComp>
 					</div>
 				</CardHeader>
@@ -74,11 +74,6 @@ export default function OrgList() {
 						data={orgList}
 						onRowClick={(user) => {
 							navigate(`${user.id}`, { relative: "path" });
-						}}
-						totalPages={20}
-						currentPage={2}
-						onPageChange={(page) => {
-							console.log(page);
 						}}
 					/>
 				</CardContent>

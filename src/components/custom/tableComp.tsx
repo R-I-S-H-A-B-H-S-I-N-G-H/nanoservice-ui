@@ -12,9 +12,9 @@ interface TableProps<T> {
 	columns: Column<T>[];
 	data: T[];
 	rowActions?: (item: T) => React.ReactNode;
-	onRowClick?: (item: T) => void; // new prop
-	
-	// --- Props for Pagination ---
+	onRowClick?: (item: T) => void;
+
+	// Pagination
 	currentPage?: number;
 	totalPages?: number;
 	onPageChange?: (page: number) => void;
@@ -22,7 +22,7 @@ interface TableProps<T> {
 
 export function TableComp<T>({ columns, data, rowActions, onRowClick, currentPage, totalPages, onPageChange }: TableProps<T>) {
 	const getPages = () => {
-		if (!totalPages || !currentPage) return []
+		if (!totalPages || !currentPage) return [];
 		const pages = [];
 		for (let i = 1; i <= totalPages; i++) {
 			if (totalPages > 5 && i > 3 && i < totalPages - 2) continue;
@@ -33,33 +33,34 @@ export function TableComp<T>({ columns, data, rowActions, onRowClick, currentPag
 
 	const pages = getPages();
 
-
 	return (
 		<div className="flex flex-col gap-3">
-			<ShadTable className="w-full">
-				<TableHeader>
+			<ShadTable className="w-full border border-border rounded-lg">
+				<TableHeader className="bg-muted">
 					<TableRow>
 						{columns.map((col) => (
-							<TableHead key={String(col.accessor)}>{col.header}</TableHead>
+							<TableHead key={String(col.accessor)} className="text-muted-foreground">
+								{col.header}
+							</TableHead>
 						))}
-						{rowActions && <TableHead>Actions</TableHead>}
+						{rowActions && <TableHead className="text-muted-foreground">Actions</TableHead>}
 					</TableRow>
 				</TableHeader>
+
 				<TableBody>
 					{data.map((item, idx) => (
-						<TableRow
-							key={idx}
-							className={`hover:bg-gray-50 cursor-pointer`}
-							onClick={() => onRowClick?.(item)} // add click here
-						>
+						<TableRow key={idx} className="hover:bg-accent cursor-pointer" onClick={() => onRowClick?.(item)}>
 							{columns.map((col) => (
-								<TableCell key={String(col.accessor)}>{col.render ? col.render(item) : String(item[col.accessor])}</TableCell>
+								<TableCell key={String(col.accessor)} className="text-foreground">
+									{col.render ? col.render(item) : String(item[col.accessor])}
+								</TableCell>
 							))}
-							{rowActions && <TableCell>{rowActions(item)}</TableCell>}
+							{rowActions && <TableCell className="text-foreground">{rowActions(item)}</TableCell>}
 						</TableRow>
 					))}
 				</TableBody>
 			</ShadTable>
+
 			{totalPages && currentPage && totalPages > 1 && (
 				<Pagination>
 					<PaginationContent>
@@ -68,8 +69,9 @@ export function TableComp<T>({ columns, data, rowActions, onRowClick, currentPag
 								href="#"
 								onClick={(e) => {
 									e.preventDefault();
-									if (currentPage > 1) onPageChange&& onPageChange(currentPage - 1);
+									if (currentPage > 1) onPageChange?.(currentPage - 1);
 								}}
+								className="text-foreground hover:text-primary"
 							/>
 						</PaginationItem>
 
@@ -80,8 +82,9 @@ export function TableComp<T>({ columns, data, rowActions, onRowClick, currentPag
 									isActive={page === currentPage}
 									onClick={(e) => {
 										e.preventDefault();
-										onPageChange&& onPageChange(page);
+										onPageChange?.(page);
 									}}
+									className={`text-foreground ${page === currentPage ? "bg-primary text-primary-foreground" : ""}`}
 								>
 									{page}
 								</PaginationLink>
@@ -90,7 +93,7 @@ export function TableComp<T>({ columns, data, rowActions, onRowClick, currentPag
 
 						{totalPages > 5 && (
 							<PaginationItem>
-								<PaginationEllipsis />
+								<PaginationEllipsis className="text-muted-foreground" />
 							</PaginationItem>
 						)}
 
@@ -99,8 +102,9 @@ export function TableComp<T>({ columns, data, rowActions, onRowClick, currentPag
 								href="#"
 								onClick={(e) => {
 									e.preventDefault();
-									if (currentPage < totalPages) onPageChange && onPageChange(currentPage + 1);
+									if (currentPage < totalPages) onPageChange?.(currentPage + 1);
 								}}
+								className="text-foreground hover:text-primary"
 							/>
 						</PaginationItem>
 					</PaginationContent>
@@ -109,4 +113,3 @@ export function TableComp<T>({ columns, data, rowActions, onRowClick, currentPag
 		</div>
 	);
 }
-

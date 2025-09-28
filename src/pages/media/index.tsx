@@ -74,14 +74,8 @@ export default function MediaPage() {
 		setUploadProgress(0);
 
 		try {
-			// 1. Create media record
 			const savedMedia = await createMedia(payload);
-			// 2. Upload file to presigned URL with progress
-			await uploadFileToPresignedUrl(selectedFile, savedMedia.presigned_url, (percent) => {
-				setUploadProgress(percent);
-			});
-
-			// 3. Refresh list
+			await uploadFileToPresignedUrl(selectedFile, savedMedia.presigned_url, setUploadProgress);
 			await updateMediaList();
 		} finally {
 			setUploading(false);
@@ -92,20 +86,25 @@ export default function MediaPage() {
 	}
 
 	return (
-		<div className="p-4">
-			<div className="mb-4 flex items-center justify-between">
+		<div className="p-4 space-y-6">
+			<div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
 				<div>
-					<h1 className="text-2xl font-bold">Media Library</h1>
-					<p className="text-muted-foreground">
+					<h1 className="text-2xl font-bold text-foreground">Media Library</h1>
+					<p className="text-sm text-muted-foreground">
 						OrgId: {orgid} / UserId: {userid}
 					</p>
 				</div>
 
 				<DialogComp title="Create Media" onSubmit={handleSubmit}>
 					<div className="space-y-4">
-						<div>
-							<Label>Name</Label>
-							<Input placeholder="Media Name" value={mediaPayload.name} onChange={(e) => setMediaPayload({ ...mediaPayload, name: e.target.value })} />
+						<div className="space-y-1">
+							<Label className="text-foreground">Name</Label>
+							<Input
+								placeholder="Media Name"
+								value={mediaPayload.name}
+								onChange={(e) => setMediaPayload({ ...mediaPayload, name: e.target.value })}
+								className="border border-border bg-background text-foreground placeholder:text-muted-foreground"
+							/>
 						</div>
 
 						<FileUploadArea
@@ -121,9 +120,9 @@ export default function MediaPage() {
 						/>
 
 						{uploading && (
-							<div className="mt-2">
+							<div className="space-y-1">
 								<Progress value={uploadProgress} className="h-2 rounded-full" />
-								<p className="text-sm mt-1">{uploadProgress}% uploaded</p>
+								<p className="text-sm text-muted-foreground">{uploadProgress}% uploaded</p>
 							</div>
 						)}
 					</div>
@@ -132,28 +131,27 @@ export default function MediaPage() {
 
 			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
 				{mediaList.map((item) => (
-					<div key={item.id} className="bg-card border rounded-lg shadow overflow-hidden">
+					<div key={item.id} className="bg-card border border-border rounded-lg shadow overflow-hidden">
 						<div className="h-48 bg-muted flex items-center justify-center">
 							{isImage(item.media_type) && <img src={`${MEDIA_BASE_PATH}${item.url}`} alt={item.name} className="w-full h-full object-cover" />}
-							{(item.media_type === "mp4" || item.media_type === "webm" || item.media_type === "ogg") && (
+							{["mp4", "webm", "ogg"].includes(item.media_type) && (
 								<video controls className="w-full h-full">
 									<source src={`${MEDIA_BASE_PATH}${item.url}`} type={`video/${item.media_type}`} />
 									Your browser does not support the video tag.
 								</video>
 							)}
 						</div>
-						<div className="p-4">
-							<h3 className="text-lg font-bold truncate">{item.name}</h3>
-							<Badge variant="outline">{item.media_type}</Badge>
-							<div className="mt-2 text-sm space-y-1">
+						<div className="p-4 space-y-2">
+							<h3 className="text-lg font-semibold text-foreground truncate">{item.name}</h3>
+							<Badge variant="outline" className="text-foreground border-border">
+								{item.media_type}
+							</Badge>
+							<div className="text-sm text-muted-foreground space-y-1">
 								<div>
 									<strong>URL:</strong>{" "}
-									<a
-										href={`${MEDIA_BASE_PATH}${item.url}`}
-										target="_blank"
-										rel="noopener noreferrer"
-										className="font-mono break-all hover:underline"
-									>{`${MEDIA_BASE_PATH}${item.url}`}</a>
+									<a href={`${MEDIA_BASE_PATH}${item.url}`} target="_blank" rel="noopener noreferrer" className="font-mono break-all hover:underline text-foreground">
+										{`${MEDIA_BASE_PATH}${item.url}`}
+									</a>
 								</div>
 								<div>
 									<strong>Created:</strong> {new Date(item.created_at).toLocaleString()}

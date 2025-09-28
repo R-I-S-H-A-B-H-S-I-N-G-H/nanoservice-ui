@@ -62,7 +62,7 @@ export function DialogComp(props: DialogFormProps) {
 
 	// ensure trigger doesn't submit any outer form
 	const triggerNode = trigger ?? (
-		<Button variant="outline" aria-label={`Open ${title} dialog`} type="button">
+		<Button variant="default" aria-label={`Open ${title} dialog`} type="button">
 			{title}
 		</Button>
 	);
