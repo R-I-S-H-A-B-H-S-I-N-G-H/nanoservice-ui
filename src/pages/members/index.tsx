@@ -1,5 +1,6 @@
 import DialogComp from "@/components/custom/dilogComp";
 import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 import type { User } from "@/types/user";
 import axios from "axios";
 import { use, useEffect, useState } from "react";
@@ -87,6 +88,11 @@ export default function Members() {
 					return (
 						<Link to={`/org/${orgid}/${user.id}`} key={user.id}>
 							<div key={user.id}>{user.full_name}</div>
+                            <div>{user.email}</div>
+                            <div>{user.id}</div>
+                            <div>{user.created_at}</div>
+                            <div>{ user.updated_at}</div>
+							<Separator />
 						</Link>
 					);
 				})}
