@@ -7,8 +7,13 @@ import Media from "./pages/media";
 import OrgList from "./pages/org/list/index.tsx";
 import UserDash from './pages/userDash/index.tsx';
 import Members from "./pages/members/index.tsx";
+import Login from "./pages/login/index.tsx";
 
 const router = createBrowserRouter([
+	{
+		path: "/login",
+		element: <Login />,
+	},
 	{
 		path: "/org",
 		element: <OrgList />,

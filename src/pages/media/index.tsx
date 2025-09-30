@@ -9,17 +9,26 @@ import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { FileUploadArea } from "@/components/custom/fileUploadArea";
 import mime from "mime";
+import { getTokenFromLocalStorage } from "@/utils/jwtUtil";
 
 // API calls
 async function getMediaList(userid = "", orgid = "") {
 	const url = `http://localhost:8000/media/list?orgid=${orgid}&userid=${userid}`;
-	const res = await axios.get(url);
+	const res = await axios.get(url, {
+		headers: {
+			Authorization: `Bearer ${getTokenFromLocalStorage()}`,
+		},
+	});
 	return res.data.data;
 }
 
-async function createMedia(payload: Media) {
-	const url = `http://localhost:8000/media`;
-	const res = await axios.post(url, payload);
+async function createMedia(payload: Media, orgid = "", userid = "") {
+	const url = `http://localhost:8000/media?orgid=${orgid}&userid=${userid}`;
+	const res = await axios.post(url, payload, {
+		headers: {
+			Authorization: `Bearer ${getTokenFromLocalStorage()}`,
+		},
+	});
 	return res.data.data;
 }
 

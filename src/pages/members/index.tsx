@@ -3,13 +3,18 @@ import { TableComp } from "@/components/custom/tableComp";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import type { User } from "@/types/user";
+import { getLoggedUser, getTokenFromLocalStorage } from "@/utils/jwtUtil";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
-async function getMembers(orgid: string) {
-	const url = `http://localhost:8000/user/list?orgid=${orgid}`;
-	const res = await axios.get(url);
+async function getMembers(orgid: string, userid: string) {
+	const url = `http://localhost:8000/user/list?orgid=${orgid}&userid=${userid}`;
+	const res = await axios.get(url, {
+		headers: {
+			Authorization: `Bearer ${getTokenFromLocalStorage()}`,
+		},
+	});
 	return res.data.data;
 }
 
@@ -30,6 +35,13 @@ async function addUserToOrg(orgid: string, userid: string) {
 }
 
 export default function Members() {
+	const currentUser = getLoggedUser();
+	const userId = currentUser?.id;
+
+	if (!userId) {
+		return <div>Invalid user</div>;
+	}
+
 	const { orgid = "" } = useParams();
 	const navigate = useNavigate();
 	const [userList, setUserList] = useState<User[]>([]);
@@ -59,7 +71,11 @@ export default function Members() {
 	}
 
 	async function updateMemberList() {
-		getMembers(orgid).then((data) => {
+		if (!orgid || !userId) {
+			console.warn("Missing orgid or userId");
+			return;
+		}
+		getMembers(orgid, userId).then((data) => {
 			console.log(data);
 			setUserList(data);
 		});

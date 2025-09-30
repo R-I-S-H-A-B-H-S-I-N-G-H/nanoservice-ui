@@ -3,21 +3,31 @@ import { TableComp } from "@/components/custom/tableComp";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import type { Org } from "@/types/org";
+import { getLoggedUser, getTokenFromLocalStorage } from "@/utils/jwtUtil";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
-const userId = "p1RODZxD";
+const userId = getLoggedUser()?.id;
+
 async function getOrgList(userid = "", orgid = "") {
 	const url = `http://localhost:8000/org/list?orgid=${orgid}&userid=${userid}`;
 
-	let res = await axios.get(url);
+	let res = await axios.get(url, {
+		headers: {
+			Authorization: `Bearer ${getTokenFromLocalStorage()}`,
+		},
+	});
 	return res.data.data;
 }
 
 async function createOrg(payload: Org) {
 	const url = `http://localhost:8000/org`;
-	const res = await axios.post(url, payload);
+	const res = await axios.post(url, payload, {
+		headers: {
+			Authorization: `Bearer ${getTokenFromLocalStorage()}`,
+		},
+	});
 	return res.data.data;
 }
 
