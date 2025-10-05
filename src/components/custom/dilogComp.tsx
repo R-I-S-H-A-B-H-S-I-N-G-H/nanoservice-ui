@@ -30,13 +30,14 @@ export type DialogFormProps = {
 	cancelText?: string;
 	/** called with form values (simple key -> string map). May return a promise. */
 	onSubmit?: (values: Record<string, string>) => void | Promise<void>;
+	onCancel?: (values: any) => void | Promise<void>;
 	/** when true, the dialog will close immediately after submit (DialogClose wrapped). default: true */
 	closeOnSubmit?: boolean;
 	className?: string;
 };
 
 export function DialogComp(props: DialogFormProps) {
-	const { trigger, title = "Edit", description, fields, children, submitText = "Save", cancelText = "Cancel", onSubmit, closeOnSubmit = true, className } = props;
+	const { trigger, title = "Edit", description, fields, children, submitText = "Save", cancelText = "Cancel", onSubmit, onCancel, closeOnSubmit = true, className } = props;
 
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
@@ -102,7 +103,7 @@ export function DialogComp(props: DialogFormProps) {
 
 					<DialogFooter>
 						<DialogClose asChild>
-							<Button variant="outline" type="button">
+							<Button variant="outline" type="button" onClick={onCancel}>
 								{cancelText}
 							</Button>
 						</DialogClose>

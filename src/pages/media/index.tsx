@@ -10,6 +10,10 @@ import { Progress } from "@/components/ui/progress";
 import { FileUploadArea } from "@/components/custom/fileUploadArea";
 import mime from "mime";
 import { getTokenFromLocalStorage } from "@/utils/jwtUtil";
+import { TooltipProvider } from "@radix-ui/react-tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Button } from "@/components/ui/button";
+import { Trash2 } from "lucide-react";
 
 // API calls
 async function getMediaList(userid = "", orgid = "") {
@@ -36,12 +40,20 @@ async function uploadFileToPresignedUrl(file: File, presignedUrl: string, onProg
 	await axios.put(presignedUrl, file, {
 		headers: { "Content-Type": file.type },
 		onUploadProgress: (progressEvent) => {
-			const percent = progressEvent.total
-				? Math.round((progressEvent.loaded * 100) / progressEvent.total)
-				: 0;
+			const percent = progressEvent.total ? Math.round((progressEvent.loaded * 100) / progressEvent.total) : 0;
 			onProgress(percent);
 		},
 	});
+}
+
+async function deleteMedia(id: string, orgid: string) {
+	const url = `http://localhost:8000/media/${id}?orgid=${orgid}`;
+	const res = await axios.delete(url, {
+		headers: {
+			Authorization: `Bearer ${getTokenFromLocalStorage()}`,
+		},
+	});
+	return res.data.data;
 }
 
 function isImage(fileNameWithExt?: string) {
@@ -53,12 +65,7 @@ export default function MediaPage() {
 	const MEDIA_BASE_PATH = "https://media.r2s.space";
 	const { userid, orgid } = useParams();
 	const [mediaList, setMediaList] = useState<Media[]>([]);
-	const [mediaPayload, setMediaPayload] = useState<Media>({
-		name: "",
-		user_id: userid,
-		org_id: orgid,
-		media_type: "",
-	});
+	const [mediaPayload, setMediaPayload] = useState<Media>(getInitialMediaPayload());
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 	const [uploadProgress, setUploadProgress] = useState<number>(0);
 	const [uploading, setUploading] = useState<boolean>(false);
@@ -66,6 +73,15 @@ export default function MediaPage() {
 	useEffect(() => {
 		updateMediaList();
 	}, [userid, orgid]);
+
+	function getInitialMediaPayload() {
+		return {
+			name: "",
+			user_id: userid,
+			org_id: orgid,
+			media_type: "",
+		};
+	}
 
 	async function updateMediaList() {
 		if (userid && orgid) {
@@ -96,6 +112,14 @@ export default function MediaPage() {
 		}
 	}
 
+	async function deleteHandler(mediaId: string | undefined) {
+		if (!mediaId) return;
+		if (!orgid) return;
+
+		await deleteMedia(mediaId, orgid);
+		await updateMediaList();
+	}
+
 	return (
 		<div className="p-4 space-y-6">
 			<div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
@@ -106,7 +130,14 @@ export default function MediaPage() {
 					</p>
 				</div>
 
-				<DialogComp title="Create Media" onSubmit={handleSubmit}>
+				<DialogComp
+					title="Create Media"
+					onSubmit={handleSubmit}
+					onCancel={() => {
+						setMediaPayload(getInitialMediaPayload());
+						setSelectedFile(null);
+					}}
+				>
 					<div className="space-y-4">
 						<div className="space-y-1">
 							<Label className="text-foreground">Name</Label>
@@ -153,7 +184,30 @@ export default function MediaPage() {
 							)}
 						</div>
 						<div className="p-4 space-y-2">
-							<h3 className="text-lg font-semibold text-foreground truncate">{item.name}</h3>
+							<div className="flex justify-between items-center space-x-2 text-sm">
+								<h3 className="text-lg font-semibold text-foreground truncate">{item.name}</h3>
+								<TooltipProvider>
+									<Tooltip>
+										<TooltipTrigger asChild>
+											<Button
+												variant="ghost"
+												size="icon"
+												aria-label="Delete item"
+												className="text-red-500 hover:bg-red-100"
+												onClick={() => {
+													deleteHandler(item.id);
+												}}
+											>
+												<Trash2 className="h-4 w-4" />
+											</Button>
+										</TooltipTrigger>
+										<TooltipContent>
+											<p>Delete</p>
+										</TooltipContent>
+									</Tooltip>
+								</TooltipProvider>
+							</div>
+
 							<Badge variant="outline" className="text-foreground border-border">
 								{item.media_type}
 							</Badge>

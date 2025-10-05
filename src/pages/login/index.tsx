@@ -8,25 +8,28 @@ import { useState } from "react";
 import { login } from "@/api/authApi";
 import { saveTokenToLocalStorage } from "@/utils/jwtUtil";
 import { useNavigate } from "react-router";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function Login() {
-    const navigator  = useNavigate()
-    const [authPayload, setAuthPayload] = useState<{ email?: string, password?: string }>({});
-    
-	async function loginHandler(e: React.FormEvent<HTMLFormElement>) {
+	const navigator = useNavigate();
+	const [authPayload, setAuthPayload] = useState<{ email?: string; password?: string }>({});
+	const [loginState, setLoginState] = useState<{ isLogging: boolean }>({ isLogging: false });
+
+	async function loginHandler(e: any) {
 		e.preventDefault();
-        if (authPayload.email === undefined || authPayload.password === undefined) {
-            return
-        }
-        try {
+		if (authPayload.email === undefined || authPayload.password === undefined) {
+			return;
+		}
+		try {
+			setLoginState({ ...loginState, isLogging: true });
 			const res = await login(authPayload.email, authPayload.password);
 			saveTokenToLocalStorage(res);
-			navigator('/org')
+			navigator("/org");
+			setLoginState({ ...loginState, isLogging: false });
 		} catch (error) {
-			
+			setLoginState({ ...loginState, isLogging: false });
 		}
-    }
-
+	}
 
 	return (
 		<div className="bg-background flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
@@ -52,13 +55,28 @@ export default function Login() {
 							<div className="flex flex-col gap-6">
 								<div className="grid gap-3">
 									<Label htmlFor="email">Email</Label>
-									<Input id="email" type="email" placeholder="m@example.com" required value={authPayload.email} onChange={(e) => setAuthPayload({ ...authPayload, email: e.target.value })}/>
+									<Input
+										id="email"
+										type="email"
+										placeholder="m@example.com"
+										required
+										value={authPayload.email}
+										onChange={(e) => setAuthPayload({ ...authPayload, email: e.target.value })}
+									/>
 								</div>
 								<div className="grid gap-3">
 									<Label htmlFor="password">Password</Label>
-									<Input id="password" type="password" placeholder="*******" required value={authPayload.password} onChange={(e) => setAuthPayload({ ...authPayload, password: e.target.value })}/>
+									<Input
+										id="password"
+										type="password"
+										placeholder="*******"
+										required
+										value={authPayload.password}
+										onChange={(e) => setAuthPayload({ ...authPayload, password: e.target.value })}
+									/>
 								</div>
-								<Button type="submit" className="w-full" onClick={loginHandler}>
+								<Button disabled={loginState.isLogging} type="submit" className="w-full" onClick={loginHandler}>
+									{loginState.isLogging && <Spinner />}
 									Login
 								</Button>
 							</div>
