@@ -14,10 +14,11 @@ import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
+import { conf } from "../../../config";
 
 // API calls
 async function getMediaList(userid = "", orgid = "") {
-	const url = `http://localhost:8000/media/list?orgid=${orgid}&userid=${userid}`;
+	const url = `${conf.BASE_URL}/media/list?orgid=${orgid}&userid=${userid}`;
 	const res = await axios.get(url, {
 		headers: {
 			Authorization: `Bearer ${getTokenFromLocalStorage()}`,
@@ -27,7 +28,7 @@ async function getMediaList(userid = "", orgid = "") {
 }
 
 async function createMedia(payload: Media, orgid = "", userid = "") {
-	const url = `http://localhost:8000/media?orgid=${orgid}&userid=${userid}`;
+	const url = `${conf.BASE_URL}/media?orgid=${orgid}&userid=${userid}`;
 	const res = await axios.post(url, payload, {
 		headers: {
 			Authorization: `Bearer ${getTokenFromLocalStorage()}`,
@@ -47,7 +48,7 @@ async function uploadFileToPresignedUrl(file: File, presignedUrl: string, onProg
 }
 
 async function deleteMedia(id: string, orgid: string) {
-	const url = `http://localhost:8000/media/${id}?orgid=${orgid}`;
+	const url = `${conf.BASE_URL}/media/${id}?orgid=${orgid}`;
 	const res = await axios.delete(url, {
 		headers: {
 			Authorization: `Bearer ${getTokenFromLocalStorage()}`,

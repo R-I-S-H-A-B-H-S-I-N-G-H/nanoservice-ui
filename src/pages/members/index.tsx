@@ -5,11 +5,12 @@ import { Input } from "@/components/ui/input";
 import type { User } from "@/types/user";
 import { getLoggedUser, getTokenFromLocalStorage } from "@/utils/jwtUtil";
 import axios from "axios";
+import { conf } from "../../../config";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
 async function getMembers(orgid: string, userid: string) {
-	const url = `http://localhost:8000/user/list?orgid=${orgid}&userid=${userid}`;
+	const url = `${conf.BASE_URL}/user/list?orgid=${orgid}&userid=${userid}`;
 	const res = await axios.get(url, {
 		headers: {
 			Authorization: `Bearer ${getTokenFromLocalStorage()}`,
@@ -19,13 +20,13 @@ async function getMembers(orgid: string, userid: string) {
 }
 
 async function saveUser(payload: User) {
-	const url = `http://localhost:8000/user`;
+	const url = `${conf.BASE_URL}/user`;
 	const res = await axios.post(url, payload);
 	return res.data.data;
 }
 
 async function addUserToOrg(orgid: string, userid: string) {
-	const url = `http://localhost:8000/membership`;
+	const url = `${conf.BASE_URL}/membership`;
 	const payload = {
 		org_id: orgid,
 		user_id: userid,

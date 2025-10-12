@@ -5,13 +5,14 @@ import { Input } from "@/components/ui/input";
 import type { Org } from "@/types/org";
 import { getLoggedUser, getTokenFromLocalStorage } from "@/utils/jwtUtil";
 import axios from "axios";
+import { conf } from "../../../../config";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
 const userId = getLoggedUser()?.id;
 
 async function getOrgList(userid = "", orgid = "") {
-	const url = `http://localhost:8000/org/list?orgid=${orgid}&userid=${userid}`;
+	const url = `${conf.BASE_URL}/org/list?orgid=${orgid}&userid=${userid}`;
 
 	let res = await axios.get(url, {
 		headers: {
@@ -22,7 +23,7 @@ async function getOrgList(userid = "", orgid = "") {
 }
 
 async function createOrg(payload: Org) {
-	const url = `http://localhost:8000/org`;
+	const url = `${conf.BASE_URL}/org`;
 	const res = await axios.post(url, payload, {
 		headers: {
 			Authorization: `Bearer ${getTokenFromLocalStorage()}`,
@@ -36,7 +37,7 @@ export default function OrgList() {
 	const navigate = useNavigate();
 	const [orgPayload, setOrgPayload] = useState<Org>({
 		name: "",
-		owner_id: userId,
+		owner_id: userId ?? "",
 	});
 
 	useEffect(() => {
@@ -54,7 +55,7 @@ export default function OrgList() {
 			if (!orgPayload.name || !orgPayload.owner_id) return;
 			await createOrg(orgPayload);
 			await updatedOrgList();
-			setOrgPayload({ name: "", owner_id: userId });
+			setOrgPayload({ name: "", owner_id: userId ?? "" });
 		} catch (error) {
 			console.error(error);
 		}
