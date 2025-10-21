@@ -1,7 +1,11 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import type { Upload } from "../types";
+
+interface Upload {
+  file: { name: string } | File;
+  progress: number;
+}
 
 interface UploadStatusProps {
   uploads: Upload[];
