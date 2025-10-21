@@ -15,6 +15,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import { conf } from "../../../config";
+import { toast } from "sonner";
 
 // API calls
 async function getMediaList(userid = "", orgid = "") {
@@ -103,7 +104,12 @@ export default function MediaPage() {
 
 		try {
 			const savedMedia = await createMedia(payload);
-			await uploadFileToPresignedUrl(selectedFile, savedMedia.presigned_url, setUploadProgress);
+			await uploadFileToPresignedUrl(selectedFile, savedMedia.presigned_url, (percent) => {
+				setUploadProgress(percent);
+				toast("Uploading", {
+					description: `Progress ${percent}%`,
+				});
+			});
 			await updateMediaList();
 		} finally {
 			setUploading(false);
@@ -123,6 +129,7 @@ export default function MediaPage() {
 
 	return (
 		<div className="p-4 space-y-6">
+			<div>Upload progress :: {uploadProgress}</div>
 			<div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
 				<div>
 					<h1 className="text-2xl font-bold text-foreground">Media Library</h1>

@@ -8,8 +8,14 @@ import OrgList from "./pages/org/list/index.tsx";
 import UserDash from './pages/userDash/index.tsx';
 import Members from "./pages/members/index.tsx";
 import Login from "./pages/login/index.tsx";
+import Home from "./pages/home/index.tsx";
+import { Toaster } from "sonner";
 
 const router = createBrowserRouter([
+	{
+		path: "/",
+		element: <Home />,
+	},
 	{
 		path: "/login",
 		element: <Login />,
@@ -48,6 +54,7 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
 	<StrictMode>
+		<Toaster />
 		<RouterProvider router={router} />
 	</StrictMode>,
 );
