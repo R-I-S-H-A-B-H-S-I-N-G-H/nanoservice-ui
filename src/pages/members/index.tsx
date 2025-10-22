@@ -9,14 +9,14 @@ import { conf } from "../../../config";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
-async function getMembers(orgid: string, userid: string) {
+async function getMembers(orgid: string, userid: string): Promise<User[]> {
 	const url = `${conf.BASE_URL}/user/list?orgid=${orgid}&userid=${userid}`;
 	const res = await axios.get(url, {
 		headers: {
 			Authorization: `Bearer ${getTokenFromLocalStorage()}`,
 		},
 	});
-	return res.data.data;
+	return res.data.data as User[];
 }
 
 async function saveUser(payload: User) {
@@ -45,7 +45,7 @@ export default function Members() {
 
 	const { orgid = "" } = useParams();
 	const navigate = useNavigate();
-	const [userList, setUserList] = useState<User[]>([]);
+	const [userList, setUserList] = useState<(User & { disabled?: boolean })[]>([]);
 	const [userPaylod, setUserPaylod] = useState<User>({
 		email: "",
 		full_name: "",
@@ -81,7 +81,18 @@ export default function Members() {
 		const permittedUsers = decoded.permissions instanceof Map ? decoded.permissions.get(orgid) ?? [] : decoded.permissions?.[orgid] ?? [];
 
 		getMembers(orgid, userId).then((data) => {
-			setUserList(data.map((ele) => ({ ...ele, disabled: !(permittedUsers.includes(ele.id) || permittedUsers.includes("*")) })));
+			const updatedUserList = data.map((ele) => ({
+				...ele,
+				disabled: !((ele.id ? permittedUsers.includes(ele.id) : false) || permittedUsers.includes("*")),
+			}));
+
+			// Sort the list: non-disabled (false) first, then disabled (true)
+			updatedUserList.sort((a, b) => {
+				// 'a.disabled' is boolean. 'true' values move to the end.
+				return Number(!!a.disabled) - Number(!!b.disabled);
+			});
+
+			setUserList(updatedUserList);
 		});
 	}
 
