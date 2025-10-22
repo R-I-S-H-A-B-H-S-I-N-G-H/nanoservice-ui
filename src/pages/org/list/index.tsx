@@ -9,8 +9,6 @@ import { conf } from "../../../../config";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
-const userId = getLoggedUser()?.id;
-
 async function getOrgList(userid = "", orgid = "") {
 	const url = `${conf.BASE_URL}/org/list?orgid=${orgid}&userid=${userid}`;
 
@@ -33,6 +31,7 @@ async function createOrg(payload: Org) {
 }
 
 export default function OrgList() {
+	const userId = getLoggedUser()?.id;
 	const [orgList, setOrgList] = useState<Org[]>([]);
 	const navigate = useNavigate();
 	const [orgPayload, setOrgPayload] = useState<Org>({
