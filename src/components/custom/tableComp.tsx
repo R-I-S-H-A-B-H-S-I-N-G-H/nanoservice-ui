@@ -1,11 +1,13 @@
 import React from "react";
+// Import the cn utility
+import { cn } from "@/lib/utils";
 import { Table as ShadTable, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "../ui/pagination";
 
 interface Column<T> {
 	header: string;
 	accessor: keyof T;
-	render?: (item: T) => React.ReactNode; // optional custom render
+	render?: (item: T) => React.ReactNode;
 }
 
 interface TableProps<T> {
@@ -13,6 +15,8 @@ interface TableProps<T> {
 	data: T[];
 	rowActions?: (item: T) => React.ReactNode;
 	onRowClick?: (item: T) => void;
+	// Add this prop to check if a row should be disabled
+	isRowDisabled?: (item: T) => boolean;
 
 	// Pagination
 	currentPage?: number;
@@ -20,7 +24,16 @@ interface TableProps<T> {
 	onPageChange?: (page: number) => void;
 }
 
-export function TableComp<T>({ columns, data, rowActions, onRowClick, currentPage, totalPages, onPageChange }: TableProps<T>) {
+export function TableComp<T>({
+	columns,
+	data,
+	rowActions,
+	onRowClick,
+	isRowDisabled, // Destructure the new prop
+	currentPage,
+	totalPages,
+	onPageChange,
+}: TableProps<T>) {
 	const getPages = () => {
 		if (!totalPages || !currentPage) return [];
 		const pages = [];
@@ -48,19 +61,36 @@ export function TableComp<T>({ columns, data, rowActions, onRowClick, currentPag
 				</TableHeader>
 
 				<TableBody>
-					{data.map((item, idx) => (
-						<TableRow key={idx} className="hover:bg-accent cursor-pointer" onClick={() => onRowClick?.(item)}>
-							{columns.map((col) => (
-								<TableCell key={String(col.accessor)} className="text-foreground">
-									{col.render ? col.render(item) : String(item[col.accessor])}
-								</TableCell>
-							))}
-							{rowActions && <TableCell className="text-foreground">{rowActions(item)}</TableCell>}
-						</TableRow>
-					))}
+					{data.map((item, idx) => {
+						// Check if the current row is disabled
+						const disabled = isRowDisabled?.(item) ?? false;
+
+						return (
+							<TableRow
+								key={idx}
+								// Use cn to conditionally apply styles
+								className={cn(disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:bg-accent")}
+								// Conditionally call onRowClick only if not disabled
+								onClick={() => !disabled && onRowClick?.(item)}
+							>
+								{columns.map((col) => (
+									<TableCell key={String(col.accessor)} className="text-foreground">
+										{col.render ? col.render(item) : String(item[col.accessor])}
+									</TableCell>
+								))}
+								{rowActions && (
+									<TableCell className="text-foreground">
+										{/* Disable pointer events on actions if row is disabled */}
+										<div className={cn(disabled && "pointer-events-none")}>{rowActions(item)}</div>
+									</TableCell>
+								)}
+							</TableRow>
+						);
+					})}
 				</TableBody>
 			</ShadTable>
 
+			{/* ... (Pagination code remains the same) ... */}
 			{totalPages && currentPage && totalPages > 1 && (
 				<Pagination>
 					<PaginationContent>

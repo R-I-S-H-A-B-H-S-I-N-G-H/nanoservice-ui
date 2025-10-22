@@ -3,7 +3,7 @@ import { TableComp } from "@/components/custom/tableComp";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import type { User } from "@/types/user";
-import { getLoggedUser, getTokenFromLocalStorage } from "@/utils/jwtUtil";
+import { decodeToken, getLoggedUser, getTokenFromLocalStorage } from "@/utils/jwtUtil";
 import axios from "axios";
 import { conf } from "../../../config";
 import { useEffect, useState } from "react";
@@ -76,9 +76,12 @@ export default function Members() {
 			console.warn("Missing orgid or userId");
 			return;
 		}
+
+		const decoded = decodeToken(getTokenFromLocalStorage() || "") as { permissions?: Map<string, string[]> | Record<string, string[]> };
+		const permittedUsers = decoded.permissions instanceof Map ? decoded.permissions.get(orgid) ?? [] : decoded.permissions?.[orgid] ?? [];
+
 		getMembers(orgid, userId).then((data) => {
-			console.log(data);
-			setUserList(data);
+			setUserList(data.map((ele) => ({ ...ele, disabled: !(permittedUsers.includes(ele.id) || permittedUsers.includes("*")) })));
 		});
 	}
 
@@ -111,6 +114,7 @@ export default function Members() {
 						onRowClick={(user) => {
 							navigate(`${user.id}`, { relative: "path" });
 						}}
+						isRowDisabled={(user) => user.disabled ?? false}
 					/>
 				</CardContent>
 			</Card>
