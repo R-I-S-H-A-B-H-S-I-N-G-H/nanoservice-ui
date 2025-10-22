@@ -10,37 +10,43 @@ import Members from "./pages/members/index.tsx";
 import Login from "./pages/login/index.tsx";
 import Home from "./pages/home/index.tsx";
 import { Toaster } from "sonner";
+import ProtectedRoute from "./components/custom/protectedRoute.tsx";
 
 const router = createBrowserRouter([
-	{
-		path: "/",
-		element: <Home />,
-	},
 	{
 		path: "/login",
 		element: <Login />,
 	},
 	{
-		path: "/org",
-		element: <OrgList />,
-	},
-	{
-		path: "/org/:orgid",
+		element: <ProtectedRoute />,
 		children: [
 			{
-				path: "",
-				element: <Members />,
+				path: "/",
+				element: <Home />,
 			},
 			{
-				path: ":userid",
+				path: "/org",
+				element: <OrgList />,
+			},
+			{
+				path: "/org/:orgid",
 				children: [
 					{
 						path: "",
-						element: <UserDash />,
+						element: <Members />,
 					},
 					{
-						path: "media",
-						element: <Media />,
+						path: ":userid",
+						children: [
+							{
+								path: "",
+								element: <UserDash />,
+							},
+							{
+								path: "media",
+								element: <Media />,
+							},
+						],
 					},
 				],
 			},

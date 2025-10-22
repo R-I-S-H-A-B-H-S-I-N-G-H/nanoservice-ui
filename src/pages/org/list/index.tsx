@@ -42,9 +42,10 @@ export default function OrgList() {
 
 	useEffect(() => {
 		updatedOrgList();
-	}, []);
+	}, [userId]);
 
 	async function updatedOrgList() {
+		if (!userId) return;
 		getOrgList(userId).then((res) => {
 			setOrgList(res);
 		});

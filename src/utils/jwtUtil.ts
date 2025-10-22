@@ -12,21 +12,49 @@ export function getTokenFromLocalStorage() {
 }
 
 export function decodeToken(token: string) {
-    return jwtDecode(token);
+	try {
+		return jwtDecode(token);
+	} catch (error) {
+		console.warn("Error decoding token:", error);
+		return null;
+	}
 }
 
 export function getLoggedUser(): User | null {
-    const token = getTokenFromLocalStorage();
-    if (!token) {
-        return null;
-    }
-    const decoded = decodeToken(token) as any;
-    if (!decoded.full_name || !decoded.email) {
-        return null;
-    }
-    return {
-        id: decoded.id,  
-        full_name: decoded.full_name,
-        email: decoded.email,
-    };
+	const token = getTokenFromLocalStorage();
+	if (!token) {
+		return null;
+	}
+	const decoded = decodeToken(token) as any;
+
+	if (!decoded) return null;
+
+	if (!decoded.full_name || !decoded.email) {
+		return null;
+	}
+	return {
+		id: decoded.id,
+		full_name: decoded.full_name,
+		email: decoded.email,
+	};
+}
+
+export function isTokenExpired(token: string): boolean {
+	try {
+		const decoded = decodeToken(token) as any;
+		const currentTime = Date.now() / 1000;
+		return decoded.exp < currentTime;
+	} catch (error) {
+		console.error("Error decoding token:", error);
+		return true;
+	}
+}
+
+export function isCurrentTokenExpired(): boolean {
+	const token = getTokenFromLocalStorage();
+
+	if (!token) {
+		return true;
+	}
+	return isTokenExpired(token);
 }
