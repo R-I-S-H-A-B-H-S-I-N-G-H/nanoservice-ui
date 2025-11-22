@@ -2,14 +2,15 @@ import { Link, useParams } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 // Import icons for the navigation links
-import { Film, Settings, UserCog, ChevronRight } from "lucide-react";
+import { Film, Settings, UserCog, ChevronRight, LineChart } from "lucide-react";
 
 // Define navigation options in an array for easy scalability
 const navigationOptions = [
-	{ to: "media", label: "Manage Media", icon: Film },
-	{ to: "settings", label: "Account Settings", icon: Settings },
-	{ to: "profile", label: "Edit Profile", icon: UserCog },
-	// Add new navigation links here in the future
+    { to: "media", label: "Manage Media", icon: Film },
+    { to: "stream", label: "Manage Streams", icon: LineChart },
+    { to: "settings", label: "Account Settings", icon: Settings },
+    { to: "profile", label: "Edit Profile", icon: UserCog },
+    // Add new navigation links here in the future
 ];
 
 export default function UserDash() {

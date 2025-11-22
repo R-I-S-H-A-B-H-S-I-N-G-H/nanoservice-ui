@@ -11,51 +11,67 @@ import Login from "./pages/login/index.tsx";
 import Home from "./pages/home/index.tsx";
 import { Toaster } from "sonner";
 import ProtectedRoute from "./components/custom/protectedRoute.tsx";
+import StreamsList from "./pages/streams/list/index.tsx";
+import StreamResList from "./pages/home/streamRes/list/index.tsx";
 
 const router = createBrowserRouter([
-	{
-		path: "/login",
-		element: <Login />,
-	},
-	{
-		element: <ProtectedRoute />,
-		children: [
-			{
-				path: "/",
-				element: <Home />,
-			},
-			{
-				path: "/org",
-				element: <OrgList />,
-			},
-			{
-				path: "/org/:orgid",
-				children: [
-					{
-						path: "",
-						element: <Members />,
-					},
-					{
-						path: ":userid",
-						children: [
-							{
-								path: "",
-								element: <UserDash />,
-							},
-							{
-								path: "media",
-								element: <Media />,
-							},
-						],
-					},
-				],
-			},
-		],
-	},
-	{
-		path: "*",
-		element: <>404 not found</>,
-	},
+    {
+        path: "/login",
+        element: <Login />,
+    },
+    {
+        element: <ProtectedRoute />,
+        children: [
+            {
+                path: "/",
+                element: <Home />,
+            },
+            {
+                path: "/org",
+                element: <OrgList />,
+            },
+            {
+                path: "/org/:orgid",
+                children: [
+                    {
+                        path: "",
+                        element: <Members />,
+                    },
+                    {
+                        path: ":userid",
+                        children: [
+                            {
+                                path: "",
+                                element: <UserDash />,
+                            },
+                            {
+                                path: "stream",
+
+                                children: [
+                                    {
+                                        path: "",
+                                        element: <StreamsList />,
+                                    },
+                                    {
+                                        path: ":streamid",
+                                        element: <StreamResList />,
+                                    },
+                                ],
+                            },
+                            {
+                                path: "media",
+                                element: <Media />,
+                            },
+                        ],
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        path: "*",
+        element: <>404 not found</>,
+    },
 ]);
 
 createRoot(document.getElementById("root")!).render(

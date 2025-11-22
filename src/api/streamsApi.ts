@@ -1,0 +1,18 @@
+import axios from "axios"
+import { conf } from "../../config"
+
+export async function getStreamResList(
+    orgId: string = "",
+    userId: string = "",
+    stream_id: string = ""
+) {
+    const url = `${conf.BASE_URL}/stream/stream-res/list?user_id=${userId}&org_id=${orgId}&stream_id=${stream_id}`;
+    const res = await axios.get(url);
+    return res.data.data;
+}
+
+export async function getStreamList(orgId: string = "", userId: string = "") {
+    const url = `${conf.BASE_URL}/stream/list?user_id=${userId}&org_id=${orgId}`;
+    const res = await axios.get(url);
+    return res.data.data;
+}
