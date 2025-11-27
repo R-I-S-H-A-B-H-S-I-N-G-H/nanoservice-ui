@@ -1,12 +1,14 @@
 import { getStreamResList } from '@/api/streamsApi';
 import { TableComp } from '@/components/custom/tableComp';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import type { StreamRes } from '@/types/stream';
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 
 export default function StreamResList() {
     const { userid, orgid, streamid } = useParams();
     const [streamResList, setStreamResList] = useState([])
+    const navigate = useNavigate()
 
     useEffect(() => { 
         updateStreamRes()
@@ -35,6 +37,9 @@ export default function StreamResList() {
                             { header: "Stream", accessor: "stream_id" },
                         ]}
                         data={streamResList}
+                        onRowClick={(stream: StreamRes) => {
+                            navigate(`${stream?.id}`, { relative: "path" });
+                        }}
                     />
                 </CardContent>
             </Card>
