@@ -53,6 +53,9 @@ export default function StreamResPage() {
                 stream_url: fullUrl
             });
 
+            console.log(streamRes);
+            
+
         } catch (error) {
             console.error("Failed to fetch stream res", error);
         } finally {
@@ -75,14 +78,7 @@ export default function StreamResPage() {
     }
 
     const videoJsOptions = {
-        autoplay: false,
-        controls: true,
-        responsive: true,
-        fluid: true,
-        sources: [{
-            src: streamRes.stream_url,
-            type: 'application/x-mpegURL'
-        }]
+        src: streamRes.stream_url ?? ""
     };
 
     return (
@@ -117,13 +113,7 @@ export default function StreamResPage() {
                 <div className="lg:col-span-2 space-y-6">
                     <Card className="overflow-hidden border-none shadow-none ring-1 ring-border">
                         <div className="aspect-video bg-black rounded-lg overflow-hidden">
-                            {streamRes.stream_url ? (
-                                <VideoPlayer options={videoJsOptions} />
-                            ) : (
-                                <div className="h-full w-full flex items-center justify-center text-white">
-                                    No Stream URL Available
-                                </div>
-                            )}
+                            <VideoPlayer {...videoJsOptions} />
                         </div>
                     </Card>
 

@@ -30,34 +30,6 @@ import type { Stream } from "@/types/stream";
 import { getStream } from "@/api/streamsApi";
 import { conf } from "../../../config";
 
-// --- COMPONENT: STATUS BADGE ---
-// const StreamStatusBadge = ({ status }: { status: string }) => {
-//     const normalized = status?.toLowerCase() || "unknown";
-    
-//     const styles = {
-//       active: "bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-500/20 dark:text-emerald-400 dark:border-emerald-500/30",
-//       ready: "bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-500/20 dark:text-emerald-400 dark:border-emerald-500/30",
-//       processing: "bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-500/20 dark:text-amber-400 dark:border-amber-500/30",
-//       failed: "bg-red-100 text-red-700 border-red-200 dark:bg-red-500/20 dark:text-red-400 dark:border-red-500/30",
-//       default: "bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700",
-//     };
-  
-//     const currentStyle = styles[normalized as keyof typeof styles] || styles.default;
-//     const isLive = normalized === 'active' || normalized === 'ready';
-  
-//     return (
-//       <div className={`flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-semibold uppercase tracking-wider ${currentStyle}`}>
-//         {isLive && (
-//           <span className="relative flex h-2 w-2">
-//             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-current opacity-75"></span>
-//             <span className="relative inline-flex rounded-full h-2 w-2 bg-current"></span>
-//           </span>
-//         )}
-//         {status}
-//       </div>
-//     );
-// };
-
 export default function Stream() {
     const params = useParams();
     const { userid, orgid, streamid } = params;
@@ -76,7 +48,9 @@ export default function Stream() {
             const streamId = streamid;
             const result = await getStream(orgid, userid, streamId);
             result["stream_url"] = `${conf.CDN_BASE_URL}/${result["stream_url"]}`
-            setData(result);
+            
+            setData({ ...result });
+            console.log(data, result);
         } catch (err: any) {
             console.error(err);
             setError("Failed to load stream details. Please try again.");
@@ -135,11 +109,7 @@ export default function Stream() {
     }
 
     const playerOptions = {
-        autoplay: false,
-        controls: true,
-        responsive: true,
-        fluid: true,
-        sources: [{ src: data.stream_url, type: "application/x-mpegURL" }],
+        src: data.stream_url
     };
 
     return (
@@ -193,7 +163,7 @@ export default function Stream() {
                         <Card className="overflow-hidden border-none shadow-lg bg-black ring-1 ring-border/50">
                             <div className="aspect-video w-full bg-black relative flex items-center justify-center">
                                 {data.stream_url ? (
-                                    <VideoPlayer options={playerOptions} />
+                                    <VideoPlayer {...playerOptions} />
                                 ) : (
                                     <div className="flex flex-col items-center gap-3 text-white/30">
                                         <MonitorPlay className="h-16 w-16 opacity-50" />
