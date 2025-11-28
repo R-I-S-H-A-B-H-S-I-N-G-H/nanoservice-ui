@@ -25,4 +25,5 @@ export interface Stream {
     user_id?: string;
     org_id?: string;
     input_media_url?: string
+    stream_url: string;
 }

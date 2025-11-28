@@ -12,8 +12,8 @@ import Home from "./pages/home/index.tsx";
 import { Toaster } from "sonner";
 import ProtectedRoute from "./components/custom/protectedRoute.tsx";
 import StreamsList from "./pages/streams/list/index.tsx";
-import StreamResList from "./pages/home/streamRes/list/index.tsx";
 import StreamRes from './pages/home/streamRes/res/index.tsx';
+import Stream from './pages/streams/index.tsx';
 
 const router = createBrowserRouter([
     {
@@ -58,7 +58,7 @@ const router = createBrowserRouter([
                                         children: [
                                             {
                                                 path: "",
-                                                element: <StreamResList />,   
+                                                element: <Stream/>,   
                                             },
                                             {
                                                 path: ":streamResid",

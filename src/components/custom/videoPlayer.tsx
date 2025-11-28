@@ -21,7 +21,7 @@ export const VideoPlayer = ({ options, onReady }: VideoPlayerProps) => {
       videoElement.classList.add('vjs-big-play-centered', 'vjs-neo-brutal');
       
       if (videoNode.current) {
-         videoNode.current.appendChild(videoElement);
+        videoNode.current.appendChild(videoElement);
       }
 
       player.current = videojs(videoElement, options, () => {
@@ -30,8 +30,8 @@ export const VideoPlayer = ({ options, onReady }: VideoPlayerProps) => {
 
     } else {
       const p = player.current;
-      if(options.sources) {
-          p.src(options.sources);
+      if (options.sources) {
+        p.src(options.sources);
       }
     }
   }, [options, onReady]);
@@ -52,9 +52,9 @@ export const VideoPlayer = ({ options, onReady }: VideoPlayerProps) => {
         - Black border (3px)
         - Hard Black Shadow (8px)
       */}
-      <div 
-        ref={videoNode} 
-        className="w-full h-full border-[3px] border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] bg-black" 
+      <div
+        ref={videoNode}
+        className="w-full h-full border-[3px] border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] bg-black"
       />
 
       <style>{`

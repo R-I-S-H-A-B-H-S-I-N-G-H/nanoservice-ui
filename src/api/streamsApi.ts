@@ -11,6 +11,16 @@ export async function getStreamResList(
     return res.data.data;
 }
 
+export async function getStream(
+    orgId: string = "",
+    userId: string = "",
+    stream_id: string = ""
+) {
+    const url = `${conf.BASE_URL}/stream/${stream_id}?user_id=${userId}&org_id=${orgId}`;
+    const res = await axios.get(url);
+    return res.data.data;
+}
+
 export async function getStreamRes(
     orgId: string = "",
     userId: string = "",
