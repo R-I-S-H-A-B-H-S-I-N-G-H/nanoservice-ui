@@ -14,11 +14,25 @@ import ProtectedRoute from "./components/custom/protectedRoute.tsx";
 import StreamsList from "./pages/streams/list/index.tsx";
 import StreamRes from './pages/home/streamRes/res/index.tsx';
 import Stream from './pages/streams/index.tsx';
+import Watch from './pages/watch/index.tsx';
 
 const router = createBrowserRouter([
     {
         path: "/login",
         element: <Login />,
+    },
+    {
+        path: "/watch",
+        children: [
+            {
+                path: "",
+                element: <></>
+            },
+            {
+                path: ":watchid",
+                element: <Watch/>
+            }
+        ]
     },
     {
         element: <ProtectedRoute />,
