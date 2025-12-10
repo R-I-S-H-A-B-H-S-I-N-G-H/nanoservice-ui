@@ -11,7 +11,7 @@ export default function Watch() {
     const [copied, setCopied] = useState(false);
 
     function generateMediaUrl() {
-        return `${conf.CDN_BASE_URL}/${watchid}/index.m3u8`;
+        return `${conf.STREAM_BASE_URL}/stream/${watchid}/playlist.m3u8`;
     }
 
     const videoJsOptions = {
