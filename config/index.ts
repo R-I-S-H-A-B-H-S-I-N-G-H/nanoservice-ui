@@ -3,5 +3,5 @@ export const conf = {
     BASE_URL:
         "https://6ljvfygiw7lc4qbgpipxczo3fi0zqeug.lambda-url.us-east-1.on.aws",
     CDN_BASE_URL: "https://poc.r2s.space",
-    STREAM_BASE_URL: "https://stream.r2s.space",
+    STREAM_BASE_URL: "https://local.r2s.space",
 };
