@@ -15,6 +15,7 @@ import StreamsList from "./pages/streams/list/index.tsx";
 import StreamRes from './pages/home/streamRes/res/index.tsx';
 import Stream from './pages/streams/index.tsx';
 import Watch from './pages/watch/index.tsx';
+import WatchCreate from './pages/watch/create/index.tsx';
 
 const router = createBrowserRouter([
     {
@@ -26,13 +27,17 @@ const router = createBrowserRouter([
         children: [
             {
                 path: "",
-                element: <></>
+                element: <></>,
+            },
+            {
+                path: "create",
+                element: <WatchCreate />,
             },
             {
                 path: ":watchid",
-                element: <Watch/>
-            }
-        ]
+                element: <Watch />,
+            },
+        ],
     },
     {
         element: <ProtectedRoute />,
@@ -72,13 +77,13 @@ const router = createBrowserRouter([
                                         children: [
                                             {
                                                 path: "",
-                                                element: <Stream/>,   
+                                                element: <Stream />,
                                             },
                                             {
                                                 path: ":streamResid",
-                                                element: <StreamRes/>
-                                            }
-                                        ]
+                                                element: <StreamRes />,
+                                            },
+                                        ],
                                     },
                                 ],
                             },
