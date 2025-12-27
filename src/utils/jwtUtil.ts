@@ -34,7 +34,7 @@ export function getLoggedUser(): User | null {
 	}
 	return {
 		id: decoded.id,
-		full_name: decoded.full_name,
+		fullName: decoded.full_name,
 		email: decoded.email,
 	};
 }

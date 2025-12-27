@@ -36,7 +36,7 @@ export default function OrgList() {
 	const navigate = useNavigate();
 	const [orgPayload, setOrgPayload] = useState<Org>({
 		name: "",
-		owner_id: userId ?? "",
+		creatorId: userId ?? "",
 	});
 
 	useEffect(() => {
@@ -44,7 +44,7 @@ export default function OrgList() {
 	}, [userId]);
 
 	async function updatedOrgList() {
-		if (!userId) return;
+		// if (!userId) return;
 		getOrgList(userId).then((res) => {
 			setOrgList(res);
 		});
@@ -52,10 +52,10 @@ export default function OrgList() {
 
 	async function handleOrgCreate() {
 		try {
-			if (!orgPayload.name || !orgPayload.owner_id) return;
+			if (!orgPayload.name || !orgPayload.creatorId) return;
 			await createOrg(orgPayload);
 			await updatedOrgList();
-			setOrgPayload({ name: "", owner_id: userId ?? "" });
+			setOrgPayload({ name: "", creatorId: userId ?? "" });
 		} catch (error) {
 			console.error(error);
 		}
@@ -69,7 +69,7 @@ export default function OrgList() {
 						<CardTitle>Organizations</CardTitle>
 						<DialogComp title="Create Org" onSubmit={handleOrgCreate}>
 							<Input placeholder="Org Name" value={orgPayload.name} onChange={(e) => setOrgPayload({ ...orgPayload, name: e.target.value })} />
-							<Input disabled placeholder="Owner Id" value={orgPayload.owner_id} onChange={(e) => setOrgPayload({ ...orgPayload, owner_id: e.target.value })} />
+							<Input disabled placeholder="Owner Id" value={orgPayload.creatorId} onChange={(e) => setOrgPayload({ ...orgPayload, creatorId: e.target.value })} />
 						</DialogComp>
 					</div>
 				</CardHeader>
@@ -77,14 +77,14 @@ export default function OrgList() {
 					<TableComp
 						columns={[
 							{ header: "Name", accessor: "name" },
-							{ header: "Owner", accessor: "owner_id" },
-							{ header: "Created At", accessor: "created_at" },
-							{ header: "Updated At", accessor: "updated_at" },
-							{ header: "ID", accessor: "id" },
+							{ header: "Owner", accessor: "creatorId" },
+							{ header: "Created At", accessor: "createdAt" },
+							{ header: "Updated At", accessor: "updatedAt" },
+							{ header: "ID", accessor: "shortId" },
 						]}
 						data={orgList}
 						onRowClick={(user) => {
-							navigate(`${user.id}`, { relative: "path" });
+							navigate(`${user.shortId}`, { relative: "path" });
 						}}
 					/>
 				</CardContent>

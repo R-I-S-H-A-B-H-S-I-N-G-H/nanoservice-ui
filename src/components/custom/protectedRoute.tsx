@@ -6,9 +6,9 @@ export default function ProtectedRoute() {
     const isExpired = isCurrentTokenExpired();
     const isLoggedIn = !isExpired && !!user?.id;
 
-	if (!isLoggedIn) {
-		return <Navigate to="/login" replace />;
-	}
+	// if (!isLoggedIn) {
+	// 	return <Navigate to="/login" replace />;
+	// }
 
 	return <Outlet />;
 }

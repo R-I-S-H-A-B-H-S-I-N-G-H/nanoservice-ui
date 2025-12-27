@@ -1,8 +1,9 @@
 export interface Org {
 	id?: string;
-	created_at?: string;
-	updated_at?: string;
-	is_deleted?: boolean;
+	createdAt?: string;
+	updatedAt?: string;
+	isDeleted?: boolean;
 	name: string;
-	owner_id: string;
+	creatorId: string;
+	shortId: string
 }

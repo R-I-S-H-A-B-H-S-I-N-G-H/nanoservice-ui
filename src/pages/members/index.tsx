@@ -40,7 +40,7 @@ export default function Members() {
 	const userId = currentUser?.id;
 
 	if (!userId) {
-		return <div>Invalid user</div>;
+		// return <div>Invalid user</div>;
 	}
 
 	const { orgid = "" } = useParams();
@@ -48,7 +48,7 @@ export default function Members() {
 	const [userList, setUserList] = useState<(User & { disabled?: boolean })[]>([]);
 	const [userPaylod, setUserPaylod] = useState<User>({
 		email: "",
-		full_name: "",
+		fullName: "",
 	});
 
 	useEffect(() => {
@@ -56,7 +56,7 @@ export default function Members() {
 	}, []);
 
 	async function saveUserHandler() {
-		if (!userPaylod.email || !userPaylod.full_name) {
+		if (!userPaylod.email || !userPaylod.fullName) {
 			console.warn("Cannont save user");
 
 			return;
@@ -72,18 +72,18 @@ export default function Members() {
 	}
 
 	async function updateMemberList() {
-		if (!orgid || !userId) {
-			console.warn("Missing orgid or userId");
-			return;
-		}
+		// if (!orgid || !userId) {
+		// 	console.warn("Missing orgid or userId");
+		// 	return;
+		// }
 
-		const decoded = decodeToken(getTokenFromLocalStorage() || "") as { permissions?: Map<string, string[]> | Record<string, string[]> };
-		const permittedUsers = decoded.permissions instanceof Map ? decoded.permissions.get(orgid) ?? [] : decoded.permissions?.[orgid] ?? [];
+		// const decoded = decodeToken(getTokenFromLocalStorage() || "") as { permissions?: Map<string, string[]> | Record<string, string[]> };
+		// const permittedUsers = decoded.permissions instanceof Map ? decoded.permissions.get(orgid) ?? [] : decoded.permissions?.[orgid] ?? [];
 
 		getMembers(orgid, userId).then((data) => {
 			const updatedUserList = data.map((ele) => ({
 				...ele,
-				disabled: !((ele.id ? permittedUsers.includes(ele.id) : false) || permittedUsers.includes("*")),
+				// disabled: !((ele.id ? permittedUsers.includes(ele.id) : false) || permittedUsers.includes("*")),
 			}));
 
 			// Sort the list: non-disabled (false) first, then disabled (true)
@@ -106,7 +106,7 @@ export default function Members() {
 						<DialogComp title="Create Member" onSubmit={saveUserHandler}>
 							<div className="space-y-3 w-72">
 								<Input placeholder="Email" value={userPaylod.email} onChange={(e) => setUserPaylod({ ...userPaylod, email: e.target.value })} />
-								<Input placeholder="Full Name" value={userPaylod.full_name} onChange={(e) => setUserPaylod({ ...userPaylod, full_name: e.target.value })} />
+								<Input placeholder="Full Name" value={userPaylod.fullName} onChange={(e) => setUserPaylod({ ...userPaylod, fullName: e.target.value })} />
 								<Input disabled placeholder="Org" value={orgid} />
 							</div>
 						</DialogComp>
@@ -115,15 +115,15 @@ export default function Members() {
 				<CardContent>
 					<TableComp
 						columns={[
-							{ header: "Name", accessor: "full_name" },
+							{ header: "Name", accessor: "fullName" },
 							{ header: "Email", accessor: "email" },
-							{ header: "Created At", accessor: "created_at" },
-							{ header: "Updated At", accessor: "updated_at" },
-							{ header: "ID", accessor: "id" },
+							{ header: "Created At", accessor: "createdAt" },
+							{ header: "Updated At", accessor: "updatedAt" },
+							{ header: "ID", accessor: "shortId" },
 						]}
 						data={userList}
 						onRowClick={(user) => {
-							navigate(`${user.id}`, { relative: "path" });
+							navigate(`${user.shortId}`, { relative: "path" });
 						}}
 						isRowDisabled={(user) => user.disabled ?? false}
 					/>
