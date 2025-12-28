@@ -31,14 +31,14 @@ export default function StreamsList() {
                 <CardContent>
                     <TableComp
                         columns={[
-                            { header: "Name", accessor: "name" },
-                            { header: "Created At", accessor: "created_at" },
-                            { header: "Updated At", accessor: "updated_at" },
-                            { header: "ID", accessor: "id" },
+                            { header: "Name", accessor: "title" },
+                            { header: "Created At", accessor: "createdAt" },
+                            { header: "Updated At", accessor: "updatedAt" },
+                            { header: "ID", accessor: "shortId" },
                         ]}
                         data={streamList}
                         onRowClick={(stream) => {
-                            navigate(`${stream.id}`, { relative: "path" });
+                            navigate(`/watch/${stream.shortId}`, {  });
                         }}
                     />
                 </CardContent>

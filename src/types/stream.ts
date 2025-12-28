@@ -16,14 +16,35 @@ export interface StreamRes {
 
 export interface Stream {
     id: string;
-    created_at: string;
-    updated_at: string;
-    is_deleted: boolean;
+    shortId: string;
 
-    name?: string 
+    createdAt: string;
+    updatedAt: string;
+    isDeleted: boolean;
+
+    title?: string 
     res: [number];
-    user_id?: string;
-    org_id?: string;
-    input_media_url?: string
-    stream_url: string;
+    userId?: string;
+    orgId?: string;
+    mediaSource?: string
+    hlsPlaylist: string;
+    thumbnail: string;
+    metadata: any
 }
+
+//  {
+//             "id": "c7fed92c-5225-4198-99f1-b1ef49560138",
+//             "shortId": "4TfP5OPR",
+//             "createdAt": "2025-12-28T00:05:25.466917+05:30",
+//             "updatedAt": "2025-12-28T00:05:25.466917+05:30",
+//             "isDeleted": false,
+//             "userId": "hphqXuQI",
+//             "orgId": "sdLAU4T9",
+//             "title": "Test Stream 2",
+//             "description": "Sintel",
+//             "status": "PENDING",
+//             "mediaSource": "https://github.com/mediaelement/mediaelement-files/raw/refs/heads/master/big_buck_bunny.mp4",
+//             "hlsPlaylist": "stream/4TfP5OPR/playlist.m3u8",
+//             "thumbnail": "",
+//             "metadata": {}
+//         }

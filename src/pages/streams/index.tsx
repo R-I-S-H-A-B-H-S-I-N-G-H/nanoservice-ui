@@ -109,7 +109,7 @@ export default function Stream() {
     }
 
     const playerOptions = {
-        src: data.stream_url
+        src: data.hlsPlaylist
     };
 
     return (
@@ -121,7 +121,7 @@ export default function Stream() {
                     
                     <div className="flex flex-col">
                         <h1 className="text-lg font-bold tracking-tight text-foreground flex items-center gap-2">
-                            {data.name || "Untitled Stream"}
+                            {data.title || "Untitled Stream"}
                         </h1>
                         <span className="text-xs font-mono text-muted-foreground flex items-center gap-1">
                             <span className="opacity-50">ID:</span> {data.id}
@@ -132,7 +132,7 @@ export default function Stream() {
                         <div className="hidden sm:flex flex-col items-end mr-2">
                             <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">Last Updated</span>
                             <span className="text-xs font-medium">
-                                {data.updated_at ? format(new Date(data.updated_at), "MMM d, HH:mm") : "-"}
+                                {data.updatedAt ? format(new Date(data.updatedAt), "MMM d, HH:mm") : "-"}
                             </span>
                         </div>
                         <Separator orientation="vertical" className="h-8 hidden sm:block" />
@@ -162,7 +162,7 @@ export default function Stream() {
                     <div className="xl:col-span-2 space-y-6">
                         <Card className="overflow-hidden border-none shadow-lg bg-black ring-1 ring-border/50">
                             <div className="aspect-video w-full bg-black relative flex items-center justify-center">
-                                {data.stream_url ? (
+                                {data.hlsPlaylist ? (
                                     <VideoPlayer {...playerOptions} />
                                 ) : (
                                     <div className="flex flex-col items-center gap-3 text-white/30">
@@ -181,7 +181,7 @@ export default function Stream() {
                             />
                             <StatsCard 
                                 label="Source Type" 
-                                value={data.input_media_url ? "VOD / URL" : "Live"} 
+                                value={data.mediaSource ? "VOD / URL" : "Live"} 
                                 icon={<Server className="h-4 w-4 text-primary" />} 
                             />
                             <StatsCard 
@@ -191,7 +191,7 @@ export default function Stream() {
                             />
                             <StatsCard 
                                 label="Created" 
-                                value={format(new Date(data.created_at), "MMM d")} 
+                                value={format(new Date(data.createdAt), "MMM d")} 
                                 icon={<Calendar className="h-4 w-4 text-primary" />} 
                             />
                         </div>
@@ -217,7 +217,7 @@ export default function Stream() {
                                     <div className="flex gap-2">
                                         <Input 
                                             id="hls-url"
-                                            value={data.stream_url || ""}
+                                            value={data.hlsPlaylist || ""}
                                             readOnly
                                             className="font-mono text-xs bg-muted/50 h-9"
                                         />
@@ -228,7 +228,7 @@ export default function Stream() {
                                             className="h-9 w-9 p-0 shrink-0"
                                             onClick={(e) => {
                                                 e.preventDefault();
-                                                handleCopy(data.stream_url, 'stream_url');
+                                                handleCopy(data.hlsPlaylist, 'stream_url');
                                             }}
                                         >
                                             {copiedField === 'stream_url' ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4" />}
@@ -243,11 +243,11 @@ export default function Stream() {
                                     <Label htmlFor="input-url" className="text-xs font-semibold uppercase text-muted-foreground">
                                         Source Input
                                     </Label>
-                                    {data.input_media_url ? (
+                                    {data.mediaSource ? (
                                         <div className="flex gap-2">
                                             <Input 
                                                 id="input-url"
-                                                value={data.input_media_url}
+                                                value={data.mediaSource}
                                                 readOnly
                                                 className="font-mono text-xs bg-muted/50 h-9 text-muted-foreground"
                                             />
@@ -258,7 +258,7 @@ export default function Stream() {
                                                 className="h-9 w-9 p-0 shrink-0"
                                                 onClick={(e) => {
                                                     e.preventDefault();
-                                                    handleCopy(data.input_media_url!, 'input_url');
+                                                    handleCopy(data.mediaSource!, 'input_url');
                                                 }}
                                             >
                                                 {copiedField === 'input_url' ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4" />}
@@ -274,11 +274,11 @@ export default function Stream() {
                                 <div className="rounded-lg bg-muted/40 p-3 space-y-3 mt-4 border">
                                     <div className="flex justify-between items-center text-sm">
                                         <span className="text-muted-foreground text-xs">Org ID</span>
-                                        <code className="text-xs bg-background px-1.5 py-0.5 rounded border">{data.org_id}</code>
+                                        <code className="text-xs bg-background px-1.5 py-0.5 rounded border">{data.orgId}</code>
                                     </div>
                                     <div className="flex justify-between items-center text-sm">
                                         <span className="text-muted-foreground text-xs">User ID</span>
-                                        <code className="text-xs bg-background px-1.5 py-0.5 rounded border">{data.user_id}</code>
+                                        <code className="text-xs bg-background px-1.5 py-0.5 rounded border">{data.userId}</code>
                                     </div>
                                 </div>
 
