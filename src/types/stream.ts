@@ -30,6 +30,13 @@ export interface Stream {
     hlsPlaylist: string;
     thumbnail: string;
     metadata: any
+    description?: string
+}
+
+export interface CreateStreamPayload {
+    title: string;
+    description: string;
+    mediaSource: string;
 }
 
 //  {

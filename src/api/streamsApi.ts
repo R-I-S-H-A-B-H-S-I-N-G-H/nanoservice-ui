@@ -1,5 +1,6 @@
 import axios from "axios"
 import { conf } from "../../config"
+import type { CreateStreamPayload } from "@/types/stream";
 
 export async function getStreamResList(
     orgId: string = "",
@@ -16,7 +17,7 @@ export async function getStream(
     userId: string = "",
     stream_id: string = ""
 ) {
-    const url = `${conf.BASE_URL}/stream/${stream_id}?user_id=${userId}&org_id=${orgId}`;
+    const url = `${conf.BASE_URL}/account/stream/${stream_id}?user_id=${userId}&org_id=${orgId}`;
     const res = await axios.get(url);
     return res.data.data;
 }
@@ -32,7 +33,14 @@ export async function getStreamRes(
 }
 
 export async function getStreamList(orgId: string = "", userId: string = "") {
-    const url = `${conf.BASE_URL}/stream/list?user_id=${userId}&org_id=${orgId}`;
+    const url = `${conf.BASE_URL}/account/stream/list?user_id=${userId}&org_id=${orgId}`;
     const res = await axios.get(url);
     return res.data.data;
+}
+
+
+export async function createStream(orgId: string = "", userId: string = "", payload: CreateStreamPayload) {
+    const url = `${conf.BASE_URL}/account/stream?orgId=${orgId}&userId=${userId}`
+    const res = await axios.post(url, payload)
+    return res.data;
 }
