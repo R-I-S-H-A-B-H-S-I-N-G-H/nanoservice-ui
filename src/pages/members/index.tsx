@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
 async function getMembers(orgid: string, userid: string): Promise<User[]> {
-	const url = `${conf.BASE_URL}/user/list?orgid=${orgid}&userid=${userid}`;
+	const url = `${conf.BASE_URL}/account/user/list?orgid=${orgid}&userid=${userid}`;
 	const res = await axios.get(url, {
 		headers: {
 			Authorization: `Bearer ${getTokenFromLocalStorage()}`,
