@@ -3,13 +3,13 @@ import { TableComp } from "@/components/custom/tableComp";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import type { User } from "@/types/user";
-import { decodeToken, getLoggedUser, getTokenFromLocalStorage } from "@/utils/jwtUtil";
+import { getLoggedUser, getTokenFromLocalStorage } from "@/utils/jwtUtil";
 import axios from "axios";
 import { conf } from "../../../config";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
-async function getMembers(orgid: string, userid: string): Promise<User[]> {
+async function getMembers(orgid: string, userid?: string): Promise<User[]> {
 	const url = `${conf.BASE_URL}/account/user/list?orgid=${orgid}&userid=${userid}`;
 	const res = await axios.get(url, {
 		headers: {

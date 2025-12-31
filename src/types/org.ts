@@ -5,5 +5,5 @@ export interface Org {
 	isDeleted?: boolean;
 	name: string;
 	creatorId: string;
-	shortId: string
+	shortId?: string
 }

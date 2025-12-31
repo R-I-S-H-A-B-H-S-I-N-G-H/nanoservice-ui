@@ -8,7 +8,7 @@ export interface User {
 	avatar_url?: string | null;
 	email: string;
 	disabled?: boolean;
-	isActive: boolean;
+	isActive?: boolean;
 }
 
 /**
