@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
 async function getOrgList(userid = "", orgid = "") {
-	const url = `${conf.BASE_URL}/account/org/list?orgid=${orgid}&userid=${userid}`;
+	const url = `${conf.BASE_URL}/account/org/list?orgId=${orgid}&userId=${userid}`;
 
 	let res = await axios.get(url, {
 		headers: {

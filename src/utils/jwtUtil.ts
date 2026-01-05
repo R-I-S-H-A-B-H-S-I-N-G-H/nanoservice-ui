@@ -23,19 +23,18 @@ export function decodeToken(token: string) {
 export function getLoggedUser(): User | null {
 	const token = getTokenFromLocalStorage();
 	if (!token) {
+		console.log("no token");
+		
 		return null;
 	}
 	const decoded = decodeToken(token) as any;
 
 	if (!decoded) return null;
 
-	if (!decoded.full_name || !decoded.email) {
-		return null;
-	}
 	return {
-		id: decoded.id,
-		fullName: decoded.full_name,
-		email: decoded.email,
+		id: decoded.user_id,
+		fullName: "N/A",
+		email: "N/A",
 	};
 }
 

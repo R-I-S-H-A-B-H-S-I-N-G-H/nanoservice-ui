@@ -28,7 +28,7 @@ export default function Login() {
 		try {
 			setLoginState({ ...loginState, isLogging: true });
 			const res = await login(authPayload.email, authPayload.password);
-			saveTokenToLocalStorage(res);
+			saveTokenToLocalStorage(res.jwt);
 			navigator("/org");
 			setLoginState({ ...loginState, isLogging: false });
 		} catch (error) {
