@@ -103,7 +103,7 @@ export default function Members() {
 					<div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
 						<CardTitle>Members</CardTitle>
 
-						<DialogComp title="Create Member" onSubmit={saveUserHandler}>
+						<DialogComp title="Add Member" onSubmit={saveUserHandler}>
 							<div className="space-y-3 w-72">
 								<Input placeholder="Email" value={userPaylod.email} onChange={(e) => setUserPaylod({ ...userPaylod, email: e.target.value })} />
 								<Input placeholder="Full Name" value={userPaylod.fullName} onChange={(e) => setUserPaylod({ ...userPaylod, fullName: e.target.value })} />

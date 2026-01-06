@@ -38,7 +38,7 @@ export default function StreamsList() {
                 <CardHeader>
 					<div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
 						<CardTitle>Streams</CardTitle>
-						<DialogComp title="Create Org" onSubmit={createStreamHandler}>
+						<DialogComp title="Create Stream" onSubmit={createStreamHandler}>
 							<Input placeholder="Stream Name" value={streamPayload.title} onChange={(e) => setStreamPayload({ ...streamPayload, title: e.target.value })} />
 							<Input placeholder="Stream Description" value={streamPayload.description} onChange={(e) => setStreamPayload({ ...streamPayload, description: e.target.value })} />
 							<Input placeholder="Media Source" value={streamPayload.mediaSource} onChange={(e) => setStreamPayload({ ...streamPayload, mediaSource: e.target.value })} />

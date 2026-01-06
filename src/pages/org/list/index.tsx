@@ -3,11 +3,12 @@ import { TableComp } from "@/components/custom/tableComp";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import type { Org } from "@/types/org";
-import { getLoggedUser, getTokenFromLocalStorage } from "@/utils/jwtUtil";
+import { getLoggedUser, getTokenFromLocalStorage, saveTokenToLocalStorage } from "@/utils/jwtUtil";
 import axios from "axios";
 import { conf } from "../../../../config";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { self } from "@/api/authApi";
 
 async function getOrgList(userid = "", orgid = "") {
 	const url = `${conf.BASE_URL}/account/org/list?orgId=${orgid}&userId=${userid}`;
@@ -55,6 +56,10 @@ export default function OrgList() {
 		try {
 			if (!orgPayload.name || !orgPayload.creatorId) return;
 			await createOrg(orgPayload, userId);
+			
+			const res = await self(userId);
+			saveTokenToLocalStorage(res.jwt);
+			
 			await updatedOrgList();
 			setOrgPayload({ name: "", creatorId: userId ?? "" });
 		} catch (error) {
