@@ -20,8 +20,8 @@ async function getOrgList(userid = "", orgid = "") {
 	return res.data.data;
 }
 
-async function createOrg(payload: Org) {
-	const url = `${conf.BASE_URL}/org`;
+async function createOrg(payload: Org, userId = "") {
+	const url = `${conf.BASE_URL}/account/org?userId=${userId}`;
 	const res = await axios.post(url, payload, {
 		headers: {
 			Authorization: `Bearer ${getTokenFromLocalStorage()}`,
@@ -37,6 +37,7 @@ export default function OrgList() {
 	const [orgPayload, setOrgPayload] = useState<Org>({
 		name: "",
 		creatorId: userId ?? "",
+		slug: ""
 	});
 
 	useEffect(() => {
@@ -53,7 +54,7 @@ export default function OrgList() {
 	async function handleOrgCreate() {
 		try {
 			if (!orgPayload.name || !orgPayload.creatorId) return;
-			await createOrg(orgPayload);
+			await createOrg(orgPayload, userId);
 			await updatedOrgList();
 			setOrgPayload({ name: "", creatorId: userId ?? "" });
 		} catch (error) {
@@ -69,6 +70,7 @@ export default function OrgList() {
 						<CardTitle>Organizations</CardTitle>
 						<DialogComp title="Create Org" onSubmit={handleOrgCreate}>
 							<Input placeholder="Org Name" value={orgPayload.name} onChange={(e) => setOrgPayload({ ...orgPayload, name: e.target.value })} />
+							<Input placeholder="Org Slug" value={orgPayload.slug} onChange={(e) => setOrgPayload({ ...orgPayload, slug: e.target.value })} />
 							<Input disabled placeholder="Owner Id" value={orgPayload.creatorId} onChange={(e) => setOrgPayload({ ...orgPayload, creatorId: e.target.value })} />
 						</DialogComp>
 					</div>

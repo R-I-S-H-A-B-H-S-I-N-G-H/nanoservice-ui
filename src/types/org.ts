@@ -6,4 +6,8 @@ export interface Org {
 	name: string;
 	creatorId: string;
 	shortId?: string
+	slug: string
+	description?:string
+	logoUrl?: string
+	settings?:any
 }
