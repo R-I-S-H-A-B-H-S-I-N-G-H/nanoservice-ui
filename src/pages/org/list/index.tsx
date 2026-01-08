@@ -37,9 +37,11 @@ export default function OrgList() {
 	const [listFilters, setListFilters] = useState<{
 		page: number;
 		totalPages: number
+		pageSize?: number,
+		totalItems?: number
 	}>({
-		page: 1,
-		totalPages: 2
+		page: 0,
+		totalPages: 1
 	});
 	const navigate = useNavigate();
 	const [orgPayload, setOrgPayload] = useState<Org>({
@@ -50,12 +52,14 @@ export default function OrgList() {
 
 	useEffect(() => {
 		updatedOrgList();
-	}, [userId, listFilters]);
+	}, [listFilters.page]);
 
 	async function updatedOrgList() {
-		// if (!userId) return;
-		getOrgList(userId, "", listFilters.page-1).then((res) => {
-			setOrgList(res);
+		getOrgList(userId, "", listFilters.page).then((res) => {
+			setOrgList(res.items);
+			console.log(res.pagination);
+
+			setListFilters({ ...res.pagination, page: listFilters.page })
 		});
 	}
 
@@ -100,10 +104,10 @@ export default function OrgList() {
 						onRowClick={(user) => {
 							navigate(`${user.shortId}`, { relative: "path" });
 						}}
-						currentPage={listFilters.page}
+						currentPage={listFilters.page + 1}
 						totalPages={listFilters.totalPages}
 						onPageChange={(page) => {
-							setListFilters({ ...listFilters, page: page })
+							setListFilters({ ...listFilters, page: page - 1 })
 						}}
 					/>
 				</CardContent>
