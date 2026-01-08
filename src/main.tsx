@@ -16,11 +16,21 @@ import StreamRes from './pages/home/streamRes/res/index.tsx';
 import Stream from './pages/streams/index.tsx';
 import Watch from './pages/watch/index.tsx';
 import WatchCreate from './pages/watch/create/index.tsx';
+import Verify from './pages/verify/verify.tsx';
+import SignUp from './pages/signup/signup.tsx';
 
 const router = createBrowserRouter([
     {
         path: "/login",
         element: <Login />,
+    },
+    {
+        path: "/verify",
+        element: <Verify />,
+    },
+    {
+        path: "/signup",
+        element: <SignUp />,
     },
     {
         path: "/watch",

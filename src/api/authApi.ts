@@ -1,6 +1,7 @@
 import axios from "axios"
 import { conf } from "../../config"
 import { getTokenFromLocalStorage } from "@/utils/jwtUtil"
+import type { SignUpPayload } from "@/types/user"
 
 export async function login(email: string, password: string) {
     const url = `${conf.BASE_URL}/account/auth/login`
@@ -21,4 +22,13 @@ export async function self(userId?: string) {
     return res.data.data
 }
 
-// account/auth/self?userId=KfYROCq9
+export async function verifyUser(token: string) {
+    const url = `${conf.BASE_URL}/account/user/verify?token=${token}`
+    return await axios.get(url)
+}
+
+export async function signUpUser(payload: SignUpPayload) {
+    const url = `${conf.BASE_URL}/account/user`
+    const res = await axios.post(url, payload)
+    return res.data.data
+}

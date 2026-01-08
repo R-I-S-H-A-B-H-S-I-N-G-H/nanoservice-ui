@@ -24,6 +24,12 @@ export interface Member {
     isOwner: boolean
 }
 
+export interface SignUpPayload{
+    email: string;
+    fullName: string;
+    password: string
+}
+
 /**
   {
             "id": "d65c076b-f73d-41ac-a79d-338f51a6514f",
