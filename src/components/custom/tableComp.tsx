@@ -48,47 +48,52 @@ export function TableComp<T>({
 
 	return (
 		<div className="flex flex-col gap-3">
-			<ShadTable className="w-full border border-border rounded-lg">
-				<TableHeader className="bg-muted">
-					<TableRow>
-						{columns.map((col) => (
-							<TableHead key={String(col.accessor)} className="text-muted-foreground">
-								{col.header}
-							</TableHead>
-						))}
-						{rowActions && <TableHead className="text-muted-foreground">Actions</TableHead>}
-					</TableRow>
-				</TableHeader>
+			<div className="h-[480px] overflow-y-auto rounded-lg">
 
-				<TableBody>
-					{data.map((item, idx) => {
-						// Check if the current row is disabled
-						const disabled = isRowDisabled?.(item) ?? false;
+				<ShadTable className="w-full border border-border rounded-lg">
+					<TableHeader className="bg-muted">
+						<TableRow>
+							{columns.map((col) => (
+								<TableHead key={String(col.accessor)} className="text-muted-foreground">
+									{col.header}
+								</TableHead>
+							))}
+							{rowActions && <TableHead className="text-muted-foreground">Actions</TableHead>}
+						</TableRow>
+					</TableHeader>
 
-						return (
-							<TableRow
-								key={idx}
-								// Use cn to conditionally apply styles
-								className={cn(disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:bg-accent")}
-								// Conditionally call onRowClick only if not disabled
-								onClick={() => !disabled && onRowClick?.(item)}
-							>
-								{columns.map((col) => (
-									<TableCell key={String(col.accessor)} className="text-foreground">
-										{col.render ? col.render(item) : String(item[col.accessor])}
-									</TableCell>
-								))}
-								{rowActions && (
-									<TableCell className="text-foreground">
-										{/* Disable pointer events on actions if row is disabled */}
-										<div className={cn(disabled && "pointer-events-none")}>{rowActions(item)}</div>
-									</TableCell>
-								)}
-							</TableRow>
-						);
-					})}
-				</TableBody>
-			</ShadTable>
+					<TableBody>
+						{data.map((item, idx) => {
+							// Check if the current row is disabled
+							const disabled = isRowDisabled?.(item) ?? false;
+
+							return (
+								<TableRow
+									key={idx}
+									// Use cn to conditionally apply styles
+									className={cn(disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:bg-accent")}
+									// Conditionally call onRowClick only if not disabled
+									onClick={() => !disabled && onRowClick?.(item)}
+								>
+									{columns.map((col) => (
+										<TableCell key={String(col.accessor)} className="text-foreground">
+											{col.render ? col.render(item) : String(item[col.accessor])}
+										</TableCell>
+									))}
+									{rowActions && (
+										<TableCell className="text-foreground">
+											{/* Disable pointer events on actions if row is disabled */}
+											<div className={cn(disabled && "pointer-events-none")}>{rowActions(item)}</div>
+										</TableCell>
+									)}
+								</TableRow>
+							);
+						})}
+					</TableBody>
+				</ShadTable>
+			</div>
+
+
 
 			{/* ... (Pagination code remains the same) ... */}
 			{totalPages && currentPage && totalPages > 1 && (

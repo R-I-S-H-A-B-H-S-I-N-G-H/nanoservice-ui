@@ -4,21 +4,16 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useEffect, useState } from "react";
 import { login } from "@/api/authApi";
 import { saveTokenToLocalStorage } from "@/utils/jwtUtil";
 import { useNavigate } from "react-router";
 import { Spinner } from "@/components/ui/spinner";
-import { ping } from "@/api/pingApi";
+import { useState } from "react";
 
 export default function Login() {
 	const navigator = useNavigate();
 	const [authPayload, setAuthPayload] = useState<{ email?: string; password?: string }>({});
 	const [loginState, setLoginState] = useState<{ isLogging: boolean }>({ isLogging: false });
-
-	useEffect(() => {
-		ping();
-	}, []);
 
 	async function loginHandler(e: any) {
 		e.preventDefault();
@@ -52,7 +47,7 @@ export default function Login() {
 								<h1 className="text-xl font-bold">Welcome to Nanoservice</h1>
 								<div className="text-center text-sm">
 									Don&apos;t have an account?{" "}
-									<a href="#" className="underline underline-offset-4">
+									<a href="/signup" className="underline underline-offset-4">
 										Sign up
 									</a>
 								</div>

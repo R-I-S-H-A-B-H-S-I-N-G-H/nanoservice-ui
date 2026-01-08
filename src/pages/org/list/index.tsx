@@ -10,8 +10,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { self } from "@/api/authApi";
 
-async function getOrgList(userid = "", orgid = "") {
-	const url = `${conf.BASE_URL}/account/org/list?orgId=${orgid}&userId=${userid}`;
+async function getOrgList(userid = "", orgid = "", page = 0, pageSize = 10) {
+	const url = `${conf.BASE_URL}/account/org/list?orgId=${orgid}&userId=${userid}&page=${page}&pageSize=${pageSize}`;
 
 	let res = await axios.get(url, {
 		headers: {
@@ -34,6 +34,13 @@ async function createOrg(payload: Org, userId = "") {
 export default function OrgList() {
 	const userId = getLoggedUser()?.id;
 	const [orgList, setOrgList] = useState<Org[]>([]);
+	const [listFilters, setListFilters] = useState<{
+		page: number;
+		totalPages: number
+	}>({
+		page: 1,
+		totalPages: 2
+	});
 	const navigate = useNavigate();
 	const [orgPayload, setOrgPayload] = useState<Org>({
 		name: "",
@@ -43,11 +50,11 @@ export default function OrgList() {
 
 	useEffect(() => {
 		updatedOrgList();
-	}, [userId]);
+	}, [userId, listFilters]);
 
 	async function updatedOrgList() {
 		// if (!userId) return;
-		getOrgList(userId).then((res) => {
+		getOrgList(userId, "", listFilters.page-1).then((res) => {
 			setOrgList(res);
 		});
 	}
@@ -56,10 +63,10 @@ export default function OrgList() {
 		try {
 			if (!orgPayload.name || !orgPayload.creatorId) return;
 			await createOrg(orgPayload, userId);
-			
+
 			const res = await self(userId);
 			saveTokenToLocalStorage(res.jwt);
-			
+
 			await updatedOrgList();
 			setOrgPayload({ name: "", creatorId: userId ?? "" });
 		} catch (error) {
@@ -92,6 +99,11 @@ export default function OrgList() {
 						data={orgList}
 						onRowClick={(user) => {
 							navigate(`${user.shortId}`, { relative: "path" });
+						}}
+						currentPage={listFilters.page}
+						totalPages={listFilters.totalPages}
+						onPageChange={(page) => {
+							setListFilters({ ...listFilters, page: page })
 						}}
 					/>
 				</CardContent>
