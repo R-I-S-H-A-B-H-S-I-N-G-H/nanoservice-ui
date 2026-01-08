@@ -57,9 +57,7 @@ export default function OrgList() {
 	async function updatedOrgList() {
 		getOrgList(userId, "", listFilters.page).then((res) => {
 			setOrgList(res.items);
-			console.log(res.pagination);
-
-			setListFilters({ ...res.pagination, page: listFilters.page })
+			setListFilters({ ...res.pagination })
 		});
 	}
 
