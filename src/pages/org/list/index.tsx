@@ -70,7 +70,7 @@ export default function OrgList() {
 			saveTokenToLocalStorage(res.jwt);
 
 			await updatedOrgList();
-			setOrgPayload({ name: "", creatorId: userId ?? "" });
+			setOrgPayload({ name: "", creatorId: userId ?? "", slug: "" });
 		} catch (error) {
 			console.error(error);
 		}

@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 /* =============================
-   THEME TOKENS
+  THEME TOKENS
 ============================= */
 @theme inline {
   --radius-sm: 0px;
@@ -33,7 +33,10 @@
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
 
+  /* Map both border types here */
   --color-border: var(--border-subtle);
+  --color-border-strong: var(--border-strong);
+  
   --color-ring: var(--ring);
 
   --font-sans: "DM Sans", sans-serif;
@@ -44,43 +47,35 @@
 }
 
 /* =============================
-   LIGHT MODE — ENTERPRISE SLATE
+  LIGHT MODE — ENTERPRISE SLATE
 ============================= */
 :root {
-  /* Base */
   --background: oklch(0.985 0.004 255);
   --foreground: oklch(0.18 0.015 255);
 
-  /* Surfaces */
   --surface: oklch(0.97 0.006 255);
   --surface-foreground: var(--foreground);
 
   --card: oklch(1 0 0);
   --card-foreground: var(--foreground);
 
-  /* Primary (Enterprise Blue, calmer) */
   --primary: oklch(0.48 0.11 255);
   --primary-foreground: oklch(0.99 0 0);
 
-  /* Secondary (Cool Slate) */
   --secondary: oklch(0.92 0.01 255);
   --secondary-foreground: oklch(0.28 0.03 255);
 
-  /* Muted (true muted, not gray-blue) */
   --muted: oklch(0.94 0.005 255);
   --muted-foreground: oklch(0.48 0.015 255);
 
-  /* Accent (Teal-Cyan, non-conflicting) */
   --accent: oklch(0.66 0.12 200);
   --accent-foreground: oklch(1 0 0);
 
-  /* Borders */
   --border-subtle: oklch(0.86 0.006 255);
   --border-strong: oklch(0.22 0.02 255);
 
   --ring: var(--primary);
 
-  /* Shadows */
   --shadow-color: oklch(0.22 0.02 255);
   --shadow-rest: 4px 4px 0 var(--shadow-color);
   --shadow-hover: 8px 8px 0 var(--shadow-color);
@@ -90,7 +85,7 @@
 }
 
 /* =============================
-   DARK MODE — CARBON / STEEL
+  DARK MODE — CARBON / STEEL
 ============================= */
 .dark {
   --background: oklch(0.11 0.005 255);
@@ -102,7 +97,6 @@
   --card: oklch(0.18 0.007 255);
   --card-foreground: var(--foreground);
 
-  /* Primary stays visible but not neon */
   --primary: oklch(0.62 0.10 255);
   --primary-foreground: oklch(0.12 0.005 255);
 
@@ -119,13 +113,11 @@
   --border-strong: oklch(0.45 0.03 255);
 
   --ring: var(--primary);
-
-  /* Dark shadows are still brutal, but quieter */
   --shadow-color: oklch(0.04 0 0);
 }
 
 /* =============================
-   BASE
+  BASE
 ============================= */
 @layer base {
   * {
@@ -135,7 +127,6 @@
   body {
     @apply bg-background text-foreground transition-colors duration-200;
     letter-spacing: var(--tracking-normal);
-
     background-image: linear-gradient(
       to bottom,
       color-mix(in oklch, var(--background) 92%, white) 0%,
@@ -154,17 +145,16 @@
 }
 
 /* =============================
-   UTILITIES
+  UTILITIES
 ============================= */
 @layer utilities {
   .btn-neobrutal {
     @apply inline-flex items-center justify-center
-           px-6 py-2
-           bg-primary text-primary-foreground
-           border-2 border-border-strong
-           font-mono font-bold uppercase
-           transition-all duration-75;
-
+          px-6 py-2
+          bg-primary text-primary-foreground
+          border-2 border-border-strong
+          font-mono font-bold uppercase
+          transition-all duration-75;
     box-shadow: var(--shadow-rest);
   }
 
@@ -180,9 +170,8 @@
 
   .card-brutal {
     @apply bg-card text-card-foreground
-           border-2 border-border-strong
-           p-4 transition-all duration-100;
-
+          border-2 border-border-strong
+          p-4 transition-all duration-100;
     box-shadow: var(--shadow-rest);
   }
 
