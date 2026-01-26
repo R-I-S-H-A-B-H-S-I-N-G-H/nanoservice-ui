@@ -19,7 +19,7 @@ import { toast } from "sonner";
 
 // API calls
 async function getMediaList(userid = "", orgid = "") {
-	const url = `${conf.BASE_URL}/media/list?orgid=${orgid}&userid=${userid}`;
+	const url = `${conf.BASE_URL}/account/asset/list?orgId=${orgid}&userId=${userid}`;
 	const res = await axios.get(url, {
 		headers: {
 			Authorization: `Bearer ${getTokenFromLocalStorage()}`,
@@ -29,7 +29,7 @@ async function getMediaList(userid = "", orgid = "") {
 }
 
 async function createMedia(payload: Media, orgid = "", userid = "") {
-	const url = `${conf.BASE_URL}/media?orgid=${orgid}&userid=${userid}`;
+	const url = `${conf.BASE_URL}/account/asset?orgId=${orgid}&userId=${userid}`;
 	const res = await axios.post(url, payload, {
 		headers: {
 			Authorization: `Bearer ${getTokenFromLocalStorage()}`,
@@ -64,7 +64,7 @@ function isImage(fileNameWithExt?: string) {
 }
 
 export default function MediaPage() {
-	const MEDIA_BASE_PATH = "https://media.r2s.space";
+	const MEDIA_BASE_PATH = conf.ASSET_CDN_URL + "/";
 	const { userid, orgid } = useParams();
 	const [mediaList, setMediaList] = useState<Media[]>([]);
 	const [mediaPayload, setMediaPayload] = useState<Media>(getInitialMediaPayload());
@@ -88,23 +88,39 @@ export default function MediaPage() {
 	async function updateMediaList() {
 		if (userid && orgid) {
 			const list = await getMediaList(userid, orgid);
-			setMediaList(list);
+			console.log(list.items);
+			
+			setMediaList(list.items);
 		}
 	}
+	/**
+	 {
+    "name": "Test Asset2",
+    "description": "Sintel",
+    "mimeType": "",
+    "extension": "mp4",
+    "size": 10000000
+}
+	 */
 
 	async function handleSubmit() {
 		if (!selectedFile) return;
 
 		const payload = { ...mediaPayload };
 		if (!payload.name) payload.name = selectedFile.name;
-		payload.media_type = selectedFile.name.split(".").pop() || "";
+		payload.extension = selectedFile.name.split(".").pop() || "";
+		payload.size = selectedFile.size;
+		payload.mimeType = selectedFile.type;
 
 		setUploading(true);
 		setUploadProgress(0);
 
 		try {
-			const savedMedia = await createMedia(payload);
-			await uploadFileToPresignedUrl(selectedFile, savedMedia.presigned_url, (percent) => {
+			const savedMedia = await createMedia(payload, orgid, userid);
+			const presignedUrl = savedMedia.preSignedUrl?.url;
+			console.log(presignedUrl, savedMedia);
+
+			await uploadFileToPresignedUrl(selectedFile, presignedUrl, (percent) => {
 				setUploadProgress(percent);
 				toast("Uploading", {
 					description: `Progress ${percent}%`,
@@ -115,7 +131,7 @@ export default function MediaPage() {
 			setUploading(false);
 			setUploadProgress(0);
 			setSelectedFile(null);
-			setMediaPayload({ name: "", user_id: userid!, org_id: orgid!, media_type: "" });
+			setMediaPayload({ name: "", userId: userid!, orgId: orgid!, extension: "" });
 		}
 	}
 
@@ -164,7 +180,7 @@ export default function MediaPage() {
 								setMediaPayload({
 									...mediaPayload,
 									name: mediaPayload.name || file.name.split(".").slice(0, -1).join("."),
-									media_type: file.name.split(".").pop(),
+									extension: file.name.split(".").pop(),
 								});
 							}}
 						/>
@@ -183,10 +199,10 @@ export default function MediaPage() {
 				{mediaList.map((item) => (
 					<div key={item.id} className="bg-card border border-border rounded-lg shadow overflow-hidden">
 						<div className="h-48 bg-muted flex items-center justify-center">
-							{isImage(item.media_type) && <img src={`${MEDIA_BASE_PATH}${item.url}`} alt={item.name} className="w-full h-full object-cover" />}
-							{["mp4", "webm", "ogg"].includes(item.media_type ?? "") && (
+							{isImage(item.extension) && <img src={`${MEDIA_BASE_PATH}${item.resourcePath}`} alt={item.name} className="w-full h-full object-cover" />}
+							{["mp4", "webm", "ogg"].includes(item.extension ?? "") && (
 								<video controls className="w-full h-full">
-									<source src={`${MEDIA_BASE_PATH}${item.url}`} type={`video/${item.media_type}`} />
+									<source src={`${MEDIA_BASE_PATH}${item.resourcePath}`} type={`video/${item.extension}`} />
 									Your browser does not support the video tag.
 								</video>
 							)}
@@ -217,17 +233,17 @@ export default function MediaPage() {
 							</div>
 
 							<Badge variant="outline" className="text-foreground border-border">
-								{item.media_type}
+								{item.extension}
 							</Badge>
 							<div className="text-sm text-muted-foreground space-y-1">
 								<div>
 									<strong>URL:</strong>{" "}
-									<a href={`${MEDIA_BASE_PATH}${item.url}`} target="_blank" rel="noopener noreferrer" className="font-mono break-all hover:underline text-foreground">
-										{`${MEDIA_BASE_PATH}${item.url}`}
+									<a href={`${MEDIA_BASE_PATH}${item.resourcePath}`} target="_blank" rel="noopener noreferrer" className="font-mono break-all hover:underline text-foreground">
+										{`${MEDIA_BASE_PATH}${item.resourcePath}`}
 									</a>
 								</div>
 								<div>
-									<strong>Created:</strong> {item.created_at ? new Date(item.created_at).toLocaleString() : "N/A"}
+									<strong>Created:</strong> {item.createdAt ? new Date(item.createdAt).toLocaleString() : "N/A"}
 								</div>
 							</div>
 						</div>

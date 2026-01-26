@@ -57,7 +57,7 @@ export default function StreamsList() {
                         ]}
                         data={streamList}
                         onRowClick={(stream) => {
-                            navigate(`/watch/${stream.shortId}`);
+                            navigate(`/watch/${stream.hlsPlaylist}`);
                         }}
                     />
                 </CardContent>
