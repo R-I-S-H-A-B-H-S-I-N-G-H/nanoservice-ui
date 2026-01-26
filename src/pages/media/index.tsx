@@ -122,9 +122,6 @@ export default function MediaPage() {
 
 			await uploadFileToPresignedUrl(selectedFile, presignedUrl, (percent) => {
 				setUploadProgress(percent);
-				toast("Uploading", {
-					description: `Progress ${percent}%`,
-				});
 			});
 			await updateMediaList();
 		} finally {
@@ -156,7 +153,9 @@ export default function MediaPage() {
 
 				<DialogComp
 					title="Create Media"
-					onSubmit={handleSubmit}
+					onSubmit={async()=>{
+						await handleSubmit();
+					}}
 					onCancel={() => {
 						setMediaPayload(getInitialMediaPayload());
 						setSelectedFile(null);
