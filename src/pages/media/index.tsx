@@ -48,8 +48,8 @@ async function uploadFileToPresignedUrl(file: File, presignedUrl: string, onProg
 	});
 }
 
-async function deleteMedia(id: string, orgid: string) {
-	const url = `${conf.BASE_URL}/media/${id}?orgid=${orgid}`;
+async function deleteMedia(id: string, orgid: string, userid: string) {
+	const url = `${conf.BASE_URL}/account/asset/${id}?orgId=${orgid}&userId=${userid}`;
 	const res = await axios.delete(url, {
 		headers: {
 			Authorization: `Bearer ${getTokenFromLocalStorage()}`,
@@ -139,7 +139,7 @@ export default function MediaPage() {
 		if (!mediaId) return;
 		if (!orgid) return;
 
-		await deleteMedia(mediaId, orgid);
+		await deleteMedia(mediaId, orgid, userid);
 		await updateMediaList();
 	}
 
@@ -219,7 +219,7 @@ export default function MediaPage() {
 												aria-label="Delete item"
 												className="text-red-500 hover:bg-red-100"
 												onClick={() => {
-													deleteHandler(item.id);
+													deleteHandler(item.shortId);
 												}}
 											>
 												<Trash2 className="h-4 w-4" />
