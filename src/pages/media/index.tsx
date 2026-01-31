@@ -59,15 +59,43 @@ async function createMedia(payload: Media, orgid = "", userid = "") {
 	return res.data.data;
 }
 
-async function uploadFileToPresignedUrl(file: File, presignedUrl: string, onProgress: (percent: number) => void) {
-	await axios.put(presignedUrl, file, {
-		headers: { "Content-Type": file.type },
-		onUploadProgress: (progressEvent) => {
-			const percent = progressEvent.total ? Math.round((progressEvent.loaded * 100) / progressEvent.total) : 0;
+async function uploadFileToPresignedUrl(
+	file: File,
+	presignedUrl: string,
+	onProgress: (percent: number) => void,
+	signal?: AbortSignal
+): Promise<void> {
+	return new Promise((resolve, reject) => {
+		const xhr = new XMLHttpRequest();
+
+		xhr.open("PUT", presignedUrl, true);
+		xhr.setRequestHeader("Content-Type", file.type);
+
+		xhr.upload.onprogress = (event) => {
+			if (!event.lengthComputable) return;
+			const percent = Math.round((event.loaded / event.total) * 100);
 			onProgress(percent);
-		},
+		};
+
+		xhr.onload = () => {
+			if (xhr.status >= 200 && xhr.status < 300) {
+				resolve();
+			} else {
+				reject(new Error(`Upload failed with status ${xhr.status}`));
+			}
+		};
+
+		xhr.onerror = () => reject(new Error("Network error during upload"));
+		xhr.onabort = () => reject(new Error("Upload aborted"));
+
+		if (signal) {
+			signal.addEventListener("abort", () => xhr.abort());
+		}
+
+		xhr.send(file);
 	});
 }
+
 
 async function deleteMedia(id: string, orgid: string, userid: string) {
 	const url = `${conf.BASE_URL}/account/asset/${id}?orgId=${orgid}&userId=${userid}`;
