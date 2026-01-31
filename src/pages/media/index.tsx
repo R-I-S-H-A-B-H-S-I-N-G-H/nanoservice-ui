@@ -18,6 +18,17 @@ import { conf } from "../../../config";
 import { toast } from "sonner";
 
 // API calls
+
+async function getMediaStats(userid = "", orgid = "") {
+	const url = `${conf.BASE_URL}/account/asset/stat?orgId=${orgid}&userId=${userid}`;
+	const res = await axios.get(url, {
+		headers: {
+			Authorization: `Bearer ${getTokenFromLocalStorage()}`,
+		},
+	});
+	return res.data.data;
+}
+
 async function getMediaList(userid = "", orgid = "") {
 	const url = `${conf.BASE_URL}/account/asset/list?orgId=${orgid}&userId=${userid}`;
 	const res = await axios.get(url, {
@@ -31,7 +42,7 @@ async function getMediaList(userid = "", orgid = "") {
 async function uploadCompleteHook(hook = "", orgId = "", userId = "") {
 	const url = `${hook}?orgId=${orgId}&userId=${userId}`
 	const res = await axios.get(url, {
-		headers:{
+		headers: {
 			Authorization: `Bearer ${getTokenFromLocalStorage()}`,
 		}
 	})
@@ -81,10 +92,25 @@ export default function MediaPage() {
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 	const [uploadProgress, setUploadProgress] = useState<number>(0);
 	const [uploading, setUploading] = useState<boolean>(false);
+	const [stats, setStats] = useState<any>(null);
 
 	useEffect(() => {
+		updateMediaData();
 		updateMediaList();
 	}, [userid, orgid]);
+
+	async function updateMediaData() {
+		if (userid && orgid) {
+			// Fetch both in parallel
+			const [list, statsData] = await Promise.all([
+				getMediaList(userid, orgid),
+				getMediaStats(userid, orgid)
+			]);
+
+			setMediaList(list.items);
+			setStats(statsData);
+		}
+	}
 
 	function getInitialMediaPayload() {
 		return {
@@ -99,17 +125,17 @@ export default function MediaPage() {
 		if (userid && orgid) {
 			const list = await getMediaList(userid, orgid);
 			console.log(list.items);
-			
+
 			setMediaList(list.items);
 		}
 	}
 	/**
 	 {
-    "name": "Test Asset2",
-    "description": "Sintel",
-    "mimeType": "",
-    "extension": "mp4",
-    "size": 10000000
+	"name": "Test Asset2",
+	"description": "Sintel",
+	"mimeType": "",
+	"extension": "mp4",
+	"size": 10000000
 }
 	 */
 
@@ -154,7 +180,6 @@ export default function MediaPage() {
 
 	return (
 		<div className="p-4 space-y-6">
-			<div>Upload progress :: {uploadProgress}</div>
 			<div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
 				<div>
 					<h1 className="text-2xl font-bold text-foreground">Media Library</h1>
@@ -165,7 +190,7 @@ export default function MediaPage() {
 
 				<DialogComp
 					title="Create Media"
-					onSubmit={async()=>{
+					onSubmit={async () => {
 						await handleSubmit();
 					}}
 					onCancel={() => {
@@ -205,6 +230,29 @@ export default function MediaPage() {
 					</div>
 				</DialogComp>
 			</div>
+
+			{stats && (
+				<div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-muted/30 p-4 rounded-xl border border-border">
+					<div>
+						<p className="text-xs text-muted-foreground uppercase font-bold">Total Storage</p>
+						<p className="text-xl font-semibold">{stats.totalActiveSize}</p>
+					</div>
+					<div>
+						<p className="text-xs text-muted-foreground uppercase font-bold">Files</p>
+						<p className="text-xl font-semibold">{stats.fileCount}</p>
+					</div>
+					<div className="col-span-2">
+						<p className="text-xs text-muted-foreground uppercase font-bold mb-1">Breakdown</p>
+						<div className="flex gap-2">
+							{stats.extensionBreakdown?.map((item: any) => (
+								<Badge key={item.extension} variant="secondary" className="capitalize">
+									{item.extension}: {item.size}
+								</Badge>
+							))}
+						</div>
+					</div>
+				</div>
+			)}
 
 			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
 				{mediaList.map((item) => (
