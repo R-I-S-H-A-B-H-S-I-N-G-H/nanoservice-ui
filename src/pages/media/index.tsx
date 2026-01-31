@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { data, useParams } from "react-router";
 import axios from "axios";
 import type { Media } from "@/types/media";
 import { Badge } from "@/components/ui/badge";
@@ -26,6 +26,16 @@ async function getMediaList(userid = "", orgid = "") {
 		},
 	});
 	return res.data.data;
+}
+
+async function uploadCompleteHook(hook = "", orgId = "", userId = "") {
+	const url = `${hook}?orgId=${orgId}&userId=${userId}`
+	const res = await axios.get(url, {
+		headers:{
+			Authorization: `Bearer ${getTokenFromLocalStorage()}`,
+		}
+	})
+	return res.data.data
 }
 
 async function createMedia(payload: Media, orgid = "", userid = "") {
@@ -117,12 +127,14 @@ export default function MediaPage() {
 
 		try {
 			const savedMedia = await createMedia(payload, orgid, userid);
-			const presignedUrl = savedMedia.preSignedUrl?.url;
+			const presignedUrl = savedMedia.presignedObj?.preSignedUrl?.url;
+			const uploadCompleteHookUrl = savedMedia.presignedObj?.uploadCompleteHook;
 			console.log(presignedUrl, savedMedia);
 
 			await uploadFileToPresignedUrl(selectedFile, presignedUrl, (percent) => {
 				setUploadProgress(percent);
 			});
+			await uploadCompleteHook(uploadCompleteHookUrl, orgid, userid)
 			await updateMediaList();
 		} finally {
 			setUploading(false);
