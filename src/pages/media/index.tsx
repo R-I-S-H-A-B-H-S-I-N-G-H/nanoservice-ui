@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { data, useParams } from "react-router";
+import { useParams } from "react-router";
 import axios from "axios";
 import type { Media } from "@/types/media";
 import { Badge } from "@/components/ui/badge";
@@ -15,7 +15,6 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import { conf } from "../../../config";
-import { toast } from "sonner";
 
 // API calls
 
@@ -97,7 +96,7 @@ async function uploadFileToPresignedUrl(
 }
 
 
-async function deleteMedia(id: string, orgid: string, userid: string) {
+async function deleteMedia(id: string, orgid: string, userid?: string) {
 	const url = `${conf.BASE_URL}/account/asset/${id}?orgId=${orgid}&userId=${userid}`;
 	const res = await axios.delete(url, {
 		headers: {
