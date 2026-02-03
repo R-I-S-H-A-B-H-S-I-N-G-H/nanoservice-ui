@@ -16,6 +16,19 @@ export interface Media {
 	preSignedUrl?: string;
 }
 
+export interface Quota {
+  resourceKey: "storage_bytes" | "bandwidth_bytes";
+  limit: number;
+  currentUsage: number;
+}
+
+export interface QuotaResponse {
+  success: boolean;
+  data: Quota[];
+}
+
+
+
 /*
 {
                 "id": "715b863c-8e08-4503-b735-c7d65e2c2ed1",
