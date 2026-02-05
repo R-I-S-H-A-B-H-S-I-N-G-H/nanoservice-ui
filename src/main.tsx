@@ -18,6 +18,7 @@ import Watch from './pages/watch/index.tsx';
 import WatchCreate from './pages/watch/create/index.tsx';
 import Verify from './pages/verify/verify.tsx';
 import SignUp from './pages/signup/signup.tsx';
+import ApiList from './pages/api/index.tsx';
 
 const router = createBrowserRouter([
     {
@@ -101,6 +102,10 @@ const router = createBrowserRouter([
                                 path: "media",
                                 element: <Media />,
                             },
+                            {
+                                path: "api",
+                                element: <ApiList/>
+                            }
                         ],
                     },
                 ],

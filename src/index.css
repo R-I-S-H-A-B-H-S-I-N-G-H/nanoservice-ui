@@ -7,176 +7,186 @@
   THEME TOKENS
 ============================= */
 @theme inline {
-  --radius-sm: 0px;
-  --radius-md: 2px;
-  --radius-lg: 4px;
-  --radius-xl: 6px;
+    --radius-sm: 0px;
+    --radius-md: 2px;
+    --radius-lg: 4px;
+    --radius-xl: 6px;
 
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
 
-  --color-surface: var(--surface);
-  --color-surface-foreground: var(--surface-foreground);
+    --color-surface: var(--surface);
+    --color-surface-foreground: var(--surface-foreground);
 
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
 
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
 
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
 
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
 
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
 
-  /* Map both border types here */
-  --color-border: var(--border-subtle);
-  --color-border-strong: var(--border-strong);
-  
-  --color-ring: var(--ring);
+    /* Map both border types here */
+    --color-border: var(--border-subtle);
+    --color-border-strong: var(--border-strong);
 
-  --font-sans: "DM Sans", sans-serif;
-  --font-mono: "Space Mono", monospace;
+    --color-ring: var(--ring);
 
-  --shadow-button: var(--shadow-rest);
-  --shadow-card: var(--shadow-rest);
+    --font-sans: "DM Sans", sans-serif;
+    --font-mono: "Space Mono", monospace;
+
+    --shadow-button: var(--shadow-rest);
+    --shadow-card: var(--shadow-rest);
 }
 
 /* =============================
   LIGHT MODE — ENTERPRISE SLATE
 ============================= */
 :root {
-  --background: oklch(0.985 0.004 255);
-  --foreground: oklch(0.18 0.015 255);
+    --background: oklch(0.985 0.004 255);
+    --foreground: oklch(0.18 0.015 255);
 
-  --surface: oklch(0.97 0.006 255);
-  --surface-foreground: var(--foreground);
+    --surface: oklch(0.97 0.006 255);
+    --surface-foreground: var(--foreground);
 
-  --card: oklch(1 0 0);
-  --card-foreground: var(--foreground);
+    --card: oklch(1 0 0);
+    --card-foreground: var(--foreground);
 
-  --primary: oklch(0.48 0.11 255);
-  --primary-foreground: oklch(0.99 0 0);
+    --primary: oklch(0.48 0.11 255);
+    --primary-foreground: oklch(0.99 0 0);
 
-  --secondary: oklch(0.92 0.01 255);
-  --secondary-foreground: oklch(0.28 0.03 255);
+    --secondary: oklch(0.92 0.01 255);
+    --secondary-foreground: oklch(0.28 0.03 255);
 
-  --muted: oklch(0.94 0.005 255);
-  --muted-foreground: oklch(0.48 0.015 255);
+    --muted: oklch(0.94 0.005 255);
+    --muted-foreground: oklch(0.48 0.015 255);
 
-  --accent: oklch(0.66 0.12 200);
-  --accent-foreground: oklch(1 0 0);
+    --accent: oklch(0.66 0.12 200);
+    --accent-foreground: oklch(1 0 0);
 
-  --border-subtle: oklch(0.86 0.006 255);
-  --border-strong: oklch(0.22 0.02 255);
+    --border-subtle: oklch(0.86 0.006 255);
+    --border-strong: oklch(0.22 0.02 255);
 
-  --ring: var(--primary);
+    --ring: var(--primary);
 
-  --shadow-color: oklch(0.22 0.02 255);
-  --shadow-rest: 4px 4px 0 var(--shadow-color);
-  --shadow-hover: 8px 8px 0 var(--shadow-color);
-  --shadow-active: 0 0 0 var(--shadow-color);
+    --shadow-color: oklch(0.22 0.02 255);
+    --shadow-rest: 4px 4px 0 var(--shadow-color);
+    --shadow-hover: 8px 8px 0 var(--shadow-color);
+    --shadow-active: 0 0 0 var(--shadow-color);
 
-  --tracking-normal: -0.01em;
+    --tracking-normal: -0.01em;
 }
 
 /* =============================
   DARK MODE — CARBON / STEEL
 ============================= */
 .dark {
-  --background: oklch(0.11 0.005 255);
-  --foreground: oklch(0.94 0.005 255);
+    --background: oklch(0.11 0.005 255);
+    --foreground: oklch(0.94 0.005 255);
 
-  --surface: oklch(0.15 0.006 255);
-  --surface-foreground: var(--foreground);
+    --surface: oklch(0.15 0.006 255);
+    --surface-foreground: var(--foreground);
 
-  --card: oklch(0.18 0.007 255);
-  --card-foreground: var(--foreground);
+    --card: oklch(0.18 0.007 255);
+    --card-foreground: var(--foreground);
 
-  --primary: oklch(0.62 0.10 255);
-  --primary-foreground: oklch(0.12 0.005 255);
+    --primary: oklch(0.62 0.1 255);
+    --primary-foreground: oklch(0.12 0.005 255);
 
-  --secondary: oklch(0.24 0.02 255);
-  --secondary-foreground: oklch(0.90 0.01 255);
+    --secondary: oklch(0.24 0.02 255);
+    --secondary-foreground: oklch(0.9 0.01 255);
 
-  --muted: oklch(0.22 0.01 255);
-  --muted-foreground: oklch(0.65 0.015 255);
+    --muted: oklch(0.22 0.01 255);
+    --muted-foreground: oklch(0.65 0.015 255);
 
-  --accent: oklch(0.68 0.11 200);
-  --accent-foreground: oklch(0.12 0.005 255);
+    --accent: oklch(0.68 0.11 200);
+    --accent-foreground: oklch(0.12 0.005 255);
 
-  --border-subtle: oklch(0.32 0.015 255);
-  --border-strong: oklch(0.45 0.03 255);
+    --border-subtle: oklch(0.32 0.015 255);
+    --border-strong: oklch(0.45 0.03 255);
 
-  --ring: var(--primary);
-  --shadow-color: oklch(0.04 0 0);
+    --ring: var(--primary);
+    --shadow-color: oklch(0.04 0 0);
 }
 
 /* =============================
   BASE
 ============================= */
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
+    * {
+        @apply border-border outline-ring/50;
+    }
 
-  body {
-    @apply bg-background text-foreground transition-colors duration-200;
-    letter-spacing: var(--tracking-normal);
-    background-image: linear-gradient(
-      to bottom,
-      color-mix(in oklch, var(--background) 92%, white) 0%,
-      var(--background) 320px
-    );
-    background-attachment: fixed;
-  }
+    button,
+    [role="button"],
+    .cursor-pointer {
+        cursor: pointer !important;
+    }
 
-  .dark body {
-    background-image: linear-gradient(
-      to bottom,
-      color-mix(in oklch, var(--background) 92%, black) 0%,
-      var(--background) 320px
-    );
-  }
+    button:disabled {
+        cursor: not-allowed !important;
+    }
+
+    body {
+        @apply bg-background text-foreground transition-colors duration-200;
+        letter-spacing: var(--tracking-normal);
+        background-image: linear-gradient(
+            to bottom,
+            color-mix(in oklch, var(--background) 92%, white) 0%,
+            var(--background) 320px
+        );
+        background-attachment: fixed;
+    }
+
+    .dark body {
+        background-image: linear-gradient(
+            to bottom,
+            color-mix(in oklch, var(--background) 92%, black) 0%,
+            var(--background) 320px
+        );
+    }
 }
 
 /* =============================
   UTILITIES
 ============================= */
 @layer utilities {
-  .btn-neobrutal {
-    @apply inline-flex items-center justify-center
+    .btn-neobrutal {
+        @apply inline-flex items-center justify-center
           px-6 py-2
           bg-primary text-primary-foreground
           border-2 border-border-strong
           font-mono font-bold uppercase
           transition-all duration-75;
-    box-shadow: var(--shadow-rest);
-  }
+        box-shadow: var(--shadow-rest);
+    }
 
-  .btn-neobrutal:hover {
-    transform: translate(-3px, -3px);
-    box-shadow: var(--shadow-hover);
-  }
+    .btn-neobrutal:hover {
+        transform: translate(-3px, -3px);
+        box-shadow: var(--shadow-hover);
+    }
 
-  .btn-neobrutal:active {
-    transform: translate(2px, 2px);
-    box-shadow: var(--shadow-active);
-  }
+    .btn-neobrutal:active {
+        transform: translate(2px, 2px);
+        box-shadow: var(--shadow-active);
+    }
 
-  .card-brutal {
-    @apply bg-card text-card-foreground
+    .card-brutal {
+        @apply bg-card text-card-foreground
           border-2 border-border-strong
           p-4 transition-all duration-100;
-    box-shadow: var(--shadow-rest);
-  }
+        box-shadow: var(--shadow-rest);
+    }
 
-  .card-brutal:hover {
-    transform: translate(-4px, -4px);
-    box-shadow: var(--shadow-hover);
-  }
+    .card-brutal:hover {
+        transform: translate(-4px, -4px);
+        box-shadow: var(--shadow-hover);
+    }
 }
