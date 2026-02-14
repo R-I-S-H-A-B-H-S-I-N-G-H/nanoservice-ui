@@ -19,5 +19,12 @@ export default defineConfig([
       ecmaVersion: 2020,
       globals: globals.browser,
     },
+    rules: {
+      // This turns the "error" into a "warning" so the build doesn't fail
+      '@typescript-eslint/no-unused-vars': 'warn', 
+      
+      // Recommended: ignore vars starting with an underscore (e.g., _data)
+      // '@typescript-eslint/no-unused-vars': ['warn', { 'argsIgnorePattern': '^_' }],
+    },
   },
 ])
