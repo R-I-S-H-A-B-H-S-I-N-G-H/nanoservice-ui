@@ -25,7 +25,7 @@ import {
     AlertCircle,
     ExternalLink,
     Calendar,
-    Image as ImageIcon,
+    // Image as ImageIcon,
     Video,
 } from "lucide-react";
 import { conf } from "../../../config";
@@ -166,14 +166,14 @@ export default function MediaPage() {
         }
     }
 
-    async function updateMediaList() {
-        if (userid && orgid) {
-            const list = await getMediaList(userid, orgid);
-            const statsData = await getMediaStats(userid, orgid); // Update stats too
-            setMediaList(list.items);
-            setStats(statsData);
-        }
-    }
+    // async function updateMediaList() {
+    //     if (userid && orgid) {
+    //         const list = await getMediaList(userid, orgid);
+    //         const statsData = await getMediaStats(userid, orgid); // Update stats too
+    //         setMediaList(list.items);
+    //         setStats(statsData);
+    //     }
+    // }
 
     async function handleSubmit() {
         if (!selectedFile) return;
