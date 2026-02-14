@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import axios from "axios";
 import {
     Trash2,
     Copy,
     CheckCircle2,
-    ShieldCheck,
-    Eye,
-    EyeOff,
     ShieldAlert,
     AlertOctagon,
 } from "lucide-react";
@@ -71,7 +68,7 @@ export default function ApiList() {
     // Key Creation States
     const [newKeyData, setNewKeyData] = useState({ name: "", description: "" });
     const [createdKey, setCreatedKey] = useState<string | null>(null);
-    const [showKey, setShowKey] = useState(false);
+    const [showKey, _] = useState(false);
     const [copied, setCopied] = useState(false);
 
     // Revoke States
