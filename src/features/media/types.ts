@@ -17,7 +17,6 @@ export interface Media {
 }
 
 export interface Quota {
-  id: string;
   resourceKey: "storage_bytes" | "bandwidth_bytes";
   limit: number;
   currentUsage: number;
