@@ -2,7 +2,7 @@ import { Link, useParams } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 // Import icons for the navigation links
-import { Film, Settings, UserCog, ChevronRight, LineChart } from "lucide-react";
+import { Film, Settings, UserCog, ChevronRight, LineChart, Key } from "lucide-react";
 
 // Define navigation options in an array for easy scalability
 const navigationOptions = [
@@ -10,6 +10,7 @@ const navigationOptions = [
     { to: "stream", label: "Manage Streams", icon: LineChart },
     { to: "settings", label: "Account Settings", icon: Settings },
     { to: "profile", label: "Edit Profile", icon: UserCog },
+	{ to: "api", label: "Manage API Keys", icon: Key },
     // Add new navigation links here in the future
 ];
 
