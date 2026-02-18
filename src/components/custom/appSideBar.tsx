@@ -9,9 +9,7 @@ import {
     Key,
     Command,
     ChevronRight,
-    Plus,
-    ListVideo,
-    Radio,
+    Megaphone,
 } from "lucide-react";
 import { Link, useParams, useLocation } from "react-router";
 import { cn } from "@/lib/utils";
@@ -65,27 +63,21 @@ const getSidebarConfig = (orgid?: string, userid?: string) => {
                 { title: "Media Library", icon: Film, url: `${base}/media` },
                 {
                     title: "Streams",
-                    icon: LineChart,
+                    icon: Video,
                     url: `${base}/stream`,
                     isDisabled: true,
-                    subItems: [
-                        {
-                            title: "All Streams",
-                            url: `${base}/stream`,
-                            icon: ListVideo,
-                        },
-                        {
-                            title: "Live Now",
-                            url: `${base}/stream/live`,
-                            icon: Radio,
-                            isDisabled: true,
-                        },
-                        {
-                            title: "Create New",
-                            url: `${base}/stream/new`,
-                            icon: Plus,
-                        },
-                    ],
+                },
+                {
+                    title: "Ad",
+                    icon: Megaphone,
+                    url: `${base}/tag`,
+                    isDisabled: true,
+                },
+                {
+                    title: "Analytics",
+                    icon: LineChart,
+                    url: `${base}/analytics`,
+                    isDisabled: true,
                 },
                 { title: "API Keys", icon: Key, url: `${base}/api` },
                 {
@@ -115,7 +107,6 @@ export function AppSidebar() {
     const { pathname } = useLocation();
     const { state } = useSidebar();
     const user = getLoggedUser();
-
 
     const config = getSidebarConfig(orgid, userid);
     const isActive = (url: string) =>
