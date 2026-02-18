@@ -33,7 +33,6 @@
     --color-accent: var(--accent);
     --color-accent-foreground: var(--accent-foreground);
 
-    /* Map both border types here */
     --color-border: var(--border-subtle);
     --color-border-strong: var(--border-strong);
 
@@ -50,35 +49,37 @@
   LIGHT MODE — ENTERPRISE SLATE
 ============================= */
 :root {
-    --background: oklch(0.985 0.004 255);
-    --foreground: oklch(0.18 0.015 255);
+    --background: oklch(0.985 0.003 255);
+    --foreground: oklch(0.22 0.02 255);
 
-    --surface: oklch(0.97 0.006 255);
+    --surface: oklch(0.965 0.004 255);
     --surface-foreground: var(--foreground);
 
     --card: oklch(1 0 0);
     --card-foreground: var(--foreground);
 
-    --primary: oklch(0.48 0.11 255);
+    /* ACTION COLOR */
+    --primary: oklch(0.52 0.13 255);
     --primary-foreground: oklch(0.99 0 0);
 
-    --secondary: oklch(0.92 0.01 255);
-    --secondary-foreground: oklch(0.28 0.03 255);
+    --secondary: oklch(0.93 0.008 255);
+    --secondary-foreground: oklch(0.32 0.025 255);
 
-    --muted: oklch(0.94 0.005 255);
-    --muted-foreground: oklch(0.48 0.015 255);
+    --muted: oklch(0.945 0.004 255);
+    --muted-foreground: oklch(0.55 0.015 255);
 
-    --accent: oklch(0.66 0.12 200);
-    --accent-foreground: oklch(1 0 0);
+    /* SOFT HIGHLIGHT (non-colliding) */
+    --accent: oklch(0.92 0.03 250);
+    --accent-foreground: oklch(0.28 0.03 255);
 
-    --border-subtle: oklch(0.86 0.006 255);
-    --border-strong: oklch(0.22 0.02 255);
+    --border-subtle: oklch(0.88 0.004 255);
+    --border-strong: oklch(0.32 0.03 255);
 
     --ring: var(--primary);
 
-    --shadow-color: oklch(0.22 0.02 255);
-    --shadow-rest: 4px 4px 0 var(--shadow-color);
-    --shadow-hover: 8px 8px 0 var(--shadow-color);
+    --shadow-color: oklch(0.32 0.03 255);
+    --shadow-rest: 3px 3px 0 var(--shadow-color);
+    --shadow-hover: 6px 6px 0 var(--shadow-color);
     --shadow-active: 0 0 0 var(--shadow-color);
 
     --tracking-normal: -0.01em;
@@ -88,32 +89,37 @@
   DARK MODE — CARBON / STEEL
 ============================= */
 .dark {
-    --background: oklch(0.11 0.005 255);
-    --foreground: oklch(0.94 0.005 255);
+    --background: oklch(0.14 0.006 255);
+    --foreground: oklch(0.93 0.006 255);
 
-    --surface: oklch(0.15 0.006 255);
+    --surface: oklch(0.18 0.007 255);
     --surface-foreground: var(--foreground);
 
-    --card: oklch(0.18 0.007 255);
+    --card: oklch(0.21 0.008 255);
     --card-foreground: var(--foreground);
 
-    --primary: oklch(0.62 0.1 255);
-    --primary-foreground: oklch(0.12 0.005 255);
+    --primary: oklch(0.68 0.11 255);
+    --primary-foreground: oklch(0.12 0.006 255);
 
-    --secondary: oklch(0.24 0.02 255);
-    --secondary-foreground: oklch(0.9 0.01 255);
+    --secondary: oklch(0.26 0.015 255);
+    --secondary-foreground: oklch(0.88 0.01 255);
 
-    --muted: oklch(0.22 0.01 255);
-    --muted-foreground: oklch(0.65 0.015 255);
+    --muted: oklch(0.24 0.01 255);
+    --muted-foreground: oklch(0.70 0.015 255);
 
-    --accent: oklch(0.68 0.11 200);
-    --accent-foreground: oklch(0.12 0.005 255);
+    /* SOFT DARK HIGHLIGHT */
+    --accent: oklch(0.28 0.03 250);
+    --accent-foreground: oklch(0.9 0.01 255);
 
-    --border-subtle: oklch(0.32 0.015 255);
-    --border-strong: oklch(0.45 0.03 255);
+    --border-subtle: oklch(0.30 0.01 255);
+    --border-strong: oklch(0.58 0.04 255);
 
     --ring: var(--primary);
-    --shadow-color: oklch(0.04 0 0);
+
+    --shadow-color: oklch(0.08 0.005 255);
+    --shadow-rest: 3px 3px 0 var(--shadow-color);
+    --shadow-hover: 6px 6px 0 var(--shadow-color);
+    --shadow-active: 0 0 0 var(--shadow-color);
 }
 
 /* =============================
@@ -137,6 +143,7 @@
     body {
         @apply bg-background text-foreground transition-colors duration-200;
         letter-spacing: var(--tracking-normal);
+
         background-image: linear-gradient(
             to bottom,
             color-mix(in oklch, var(--background) 92%, white) 0%,
@@ -151,6 +158,11 @@
             color-mix(in oklch, var(--background) 92%, black) 0%,
             var(--background) 320px
         );
+    }
+
+    /* ensures accent text never clashes */
+    .bg-accent {
+        color: var(--accent-foreground);
     }
 }
 
