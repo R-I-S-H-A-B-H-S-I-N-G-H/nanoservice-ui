@@ -1,3 +1,5 @@
+import { useMemo } from "react"; // Added for performance
+import multiavatar from "@multiavatar/multiavatar/esm";
 import {
     Users,
     Video,
@@ -36,6 +38,7 @@ import {
     CollapsibleContent,
     CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import { getLoggedUser } from "@/utils/jwtUtil";
 
 /**
  * 1. CONFIGURATION DATA
@@ -47,7 +50,6 @@ const getSidebarConfig = (orgid?: string, userid?: string) => {
             label: "Platform",
             items: [
                 { title: "Organizations", icon: Users, url: "/org" },
-                // Global Watch is now correctly disabled via the component logic below
                 {
                     title: "Global Watch",
                     icon: Video,
@@ -112,14 +114,28 @@ export function AppSidebar() {
     const { orgid, userid } = useParams();
     const { pathname } = useLocation();
     const { state } = useSidebar();
+    const user = getLoggedUser();
+
 
     const config = getSidebarConfig(orgid, userid);
     const isActive = (url: string) =>
         url === "/" ? pathname === "/" : pathname.startsWith(url);
 
+    /**
+     * MULTIAVATAR GENERATION LOGIC
+     * We memoize this so it doesn't re-calculate on every small render.
+     */
+    const avatarDataUri = useMemo(() => {
+        const seed = user?.id || "guest-operator";
+        const svgCode = multiavatar(seed);
+        // Convert SVG to Base64 so <AvatarImage /> can treat it as a standard source
+        const base64 = btoa(unescape(encodeURIComponent(svgCode)));
+        return `data:image/svg+xml;base64,${base64}`;
+    }, [userid]);
+
     return (
         <Sidebar collapsible="icon" className="border-r border-border/40">
-            {/* HEADER: Branding & Integrated Toggle */}
+            {/* HEADER */}
             <SidebarHeader className="h-14 border-b border-border/40 flex flex-row items-center justify-between px-4">
                 {state === "expanded" && (
                     <Link
@@ -139,7 +155,7 @@ export function AppSidebar() {
                 />
             </SidebarHeader>
 
-            {/* CONTENT: Config-driven sections */}
+            {/* CONTENT */}
             <SidebarContent className="py-2 scrollbar-none">
                 {config.map(
                     (group, idx) =>
@@ -167,7 +183,7 @@ export function AppSidebar() {
                 )}
             </SidebarContent>
 
-            {/* FOOTER: User Profile Card */}
+            {/* FOOTER: Updated with Multiavatar */}
             <SidebarFooter className="border-t border-border/40 p-2">
                 <SidebarMenu>
                     <SidebarMenuItem>
@@ -176,16 +192,14 @@ export function AppSidebar() {
                             className="hover:bg-muted/50 rounded-lg transition-colors"
                         >
                             <Avatar className="h-8 w-8 rounded-md border border-border/50">
-                                <AvatarImage
-                                    src={`https://avatar.vercel.sh/${userid || "guest"}.png`}
-                                />
+                                <AvatarImage src={avatarDataUri} />
                                 <AvatarFallback className="bg-primary/5 text-primary text-[10px]">
-                                    US
+                                    {userid?.slice(0, 2).toUpperCase() || "OP"}
                                 </AvatarFallback>
                             </Avatar>
                             <div className="grid flex-1 text-left text-xs leading-tight ml-2 font-sans">
                                 <span className="truncate font-semibold uppercase">
-                                    {userid?.slice(0, 8) || "Operator"}
+                                    {user?.id || "Operator"}
                                 </span>
                                 <span className="truncate text-muted-foreground opacity-70 font-mono text-[10px]">
                                     Active Session
@@ -200,7 +214,7 @@ export function AppSidebar() {
 }
 
 /**
- * 3. SUB-COMPONENT: Single Item vs Nested Item logic
+ * 3. SUB-COMPONENT
  */
 function SidebarItem({
     item,
@@ -211,7 +225,6 @@ function SidebarItem({
 }) {
     const active = isActive(item.url);
 
-    // Nested (Collapsible) Style
     if (item.subItems) {
         return (
             <Collapsible
@@ -284,11 +297,10 @@ function SidebarItem({
         );
     }
 
-    // Standard Link Style
     return (
         <SidebarMenuItem>
             <SidebarMenuButton
-                asChild={!item.isDisabled} // CRITICAL: Only act as a Link if not disabled
+                asChild={!item.isDisabled}
                 isActive={!item.isDisabled && active}
                 tooltip={item.title}
                 className={cn(
